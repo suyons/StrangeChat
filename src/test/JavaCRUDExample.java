@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class JavaCRUDExample {
+	// 주석 테스트입니다.
     static Map<Integer, String> dataStore = new HashMap<>();
     static int idCounter = 1;
     static Scanner scanner = new Scanner(System.in);
