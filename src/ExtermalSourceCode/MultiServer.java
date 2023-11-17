@@ -21,7 +21,7 @@ public class MultiServer {
 		ServerSocket serverSocket = null;
 		Socket socket = null;
 		try {
-			serverSocket = new ServerSocket(8000);
+			serverSocket = new ServerSocket(10011);
 			while (true) {
 				System.out.println("[클라이언트 연결대기중]");
 				socket = serverSocket.accept();
