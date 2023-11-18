@@ -15,9 +15,10 @@ public class MultiClient {
 	}
 
 	public void start() {
-		// Socket socket = null;
 		BufferedReader in = null;
-		try (Socket socket = new Socket("localhost", 10011)) {
+		try {
+			System.out.println("[서버 연결 전입니다]");
+			Socket socket = new Socket("192.168.0.251", 8000);
 			System.out.println("[서버와 연결되었습니다]");
 
 			String name = "user" + (int) (Math.random() * 10);
@@ -30,13 +31,13 @@ public class MultiClient {
 				if (("[" + name + "]님이 나가셨습니다").equals(inputMsg))
 					break;
 				System.out.println("From:" + inputMsg);
+				socket.close();
 			}
 		} catch (IOException e) {
 			System.out.println("[서버 접속끊김]");
 		}
 		System.out.println("[서버 연결종료]");
 	}
-
 }
 
 class SendThread extends Thread {
