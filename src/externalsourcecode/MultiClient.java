@@ -18,7 +18,7 @@ public class MultiClient {
 		BufferedReader in = null;
 		try {
 			System.out.println("[서버 연결 전입니다]");
-			Socket socket = new Socket("192.168.0.251", 8000);
+			Socket socket = new Socket("192.168.0.245", 8000);
 			System.out.println("[서버와 연결되었습니다]");
 
 			String name = "user" + (int) (Math.random() * 10);

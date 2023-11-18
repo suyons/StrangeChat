@@ -4,6 +4,6 @@
 /**
  * 
  */
-module Java_CRUD
+interface Java_CRUD
 {
 }
