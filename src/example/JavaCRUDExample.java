@@ -1,3 +1,5 @@
+// CRUD (Create, Read, Update, Delete 예제)
+
 package example;
 
 import java.util.HashMap;
