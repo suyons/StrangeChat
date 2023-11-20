@@ -19,7 +19,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 public class ChatClient extends JFrame implements ActionListener{
-//ㅈㅈwsw
+
 	private JPanel panelCenter;
 	private JPanel panelSouth;
 	
@@ -98,7 +98,7 @@ public class ChatClient extends JFrame implements ActionListener{
 			out.write(outMessage + "\n");	//try캐치문 실행
 			out.flush();
 			
-			ta.append("[클라이언트] : " + outMessage + "\n");
+			ta.append("[클라이언트]"+"\n" + outMessage + "\n");
 			tf.setText("");
 			tf.requestFocus();
 		} catch (IOException e) {
@@ -124,7 +124,7 @@ public class ChatClient extends JFrame implements ActionListener{
 			
 			while(true) {	//와일문 돌면서 뭔가를 받으면 찍겠다
 				String inMsg = in.readLine();
-				ta.append("[서버] : " + inMsg+ "\n");
+				ta.append("[서버]"+"\n" + inMsg+ "\n");
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

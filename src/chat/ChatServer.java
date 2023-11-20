@@ -70,7 +70,7 @@ public class ChatServer extends JFrame implements ActionListener{
 					break;
 				}
 				//정상메시지인경우
-				ta.append("[클라이언트] : " + inMsg + "\n");
+				ta.append("[클라이언트]"+"\n" + inMsg + "\n");
 				
 			}
 			
@@ -139,8 +139,7 @@ public class ChatServer extends JFrame implements ActionListener{
 			String outMessage = tf.getText();	//textfield에 있는 메세지를 외부(클)로 보낸다
 			out.write(outMessage + "\n");	//try캐치문 실행
 			out.flush();
-			
-			ta.append("[서버] : " + outMessage + "\n");
+			ta.append("[서버]"+"\n" + outMessage +  "\n");
 			tf.setText("");
 			tf.requestFocus();
 		} catch (IOException e) {
