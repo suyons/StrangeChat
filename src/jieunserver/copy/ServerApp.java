@@ -26,7 +26,7 @@ public class ServerApp {
                 if (ChatServer.getUserName(clientSocket.getInetAddress()) == null)
                     // 기존 접속 기록이 없다면 K-V 페어 레코드를 HashMap에 추가
                     ChatServer.addUser(new User(clientSocket.getInetAddress()));
-                	//csv 파일에 넣기
+                	//User.csv 파일에 유저 아이피주소, 닉네임 넣기
                 	ChatServer.addUserCsv(clientSocket.getInetAddress());
                 // "새 클라이언트 연결: IP주소" 출력
                 System.out.println(ChatServer.newClient(clientSocket.getInetAddress()));
@@ -66,6 +66,8 @@ public class ServerApp {
                     Chat chat = ChatServer.clientsChat(clientSocket.getInetAddress(), content);
                     System.out.println(chat);
                     writer.println(chat);
+                  //Chat.csv 파일에 시간, 유저닉네임, 대화내용 넣기
+                	ChatServer.addChatCsv(clientSocket.getInetAddress());
                 }
             }
         } catch (IOException e) {

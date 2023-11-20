@@ -70,7 +70,6 @@ public class ServerApp {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            serverSocket.close();
         }
     }
 }

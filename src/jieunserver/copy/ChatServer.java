@@ -42,14 +42,14 @@ public class ChatServer {
     }
     
 	// User.csv 파일에 IP주소, 닉네임 기록
-	static void addUserCsv(InetAddress InetAddress) {
+	static void addUserCsv(InetAddress ipAddr) {
 		Iterator<InetAddress> ir = userMap.keySet().iterator();
 		while (ir.hasNext()) {
-			InetAddress key = ir.next();
-			String userName = userMap.get(key);
+			ipAddr = ir.next();
+			String userName = userMap.get(ipAddr);
 
 			try (FileWriter fw = new FileWriter("User.csv")) {
-				String IpAdress = InetAddress.getHostAddress();
+				String IpAdress = ipAddr.getHostAddress();
 				fw.write(IpAdress);
 				fw.write(", ");
 				fw.write(userName);
@@ -61,18 +61,22 @@ public class ChatServer {
 		}
 	}
 	
-	// Chat.csv 파일에 IP주소, 닉네임 기록
-		static void addChatCsv(InetAddress InetAddress) {
-			Iterator<InetAddress> ir = userMap.keySet().iterator();
+	// Chat.csv 파일에 시간, 대화내용, 닉네임 입력
+		static void addChatCsv(InetAddress ipAddr) {
+			Iterator<Long> ir = chatMap.keySet().iterator();
 			while (ir.hasNext()) {
-				InetAddress key = ir.next();
-				String userName = userMap.get(key);
+				Long timestamp = ir.next();
+				String chat = chatMap.get(timestamp);
+				String userName = userMap.get(ipAddr);
 
 				try (FileWriter fw = new FileWriter("Chat.csv")) {
-					String IpAdress = InetAddress.getHostAddress();
-					fw.write(IpAdress);
+					Chat ch = new Chat();
+					String time = Chat.hourMinute(ch.timestamp);
+					fw.write(time);
 					fw.write(", ");
 					fw.write(userName);
+					fw.write(", ");
+					fw.write(chat);
 
 				} catch (IOException e) {
 					e.printStackTrace();
