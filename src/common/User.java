@@ -12,6 +12,7 @@ public class User {
     public final InetAddress ipAddr;
     public String userName;
 
+    // 생성자 재정의: 위의 2개 배열에서 무작위 추출 → 2글자 + 2글자로 결합하여 지정하기
     public User(InetAddress ipAddr) {
         this.ipAddr = ipAddr;
         this.userName = nameList1.get((int) (Math.random() * 12)) + nameList2.get((int) (Math.random() * 12));

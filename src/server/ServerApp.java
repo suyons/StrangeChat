@@ -25,7 +25,7 @@ public class ServerApp {
                 if (ChatServer.getUserName(clientSocket.getInetAddress()) == null)
                     // 기존 접속 기록이 없다면 K-V 페어 레코드를 HashMap에 추가
                     ChatServer.addUser(new User(clientSocket.getInetAddress()));
-                // HashMap에서 이름 불러와서 "OOOO님 반갑습니다" 출력
+                // "새 클라이언트 연결: IP주소" 출력
                 System.out.println(ChatServer.newClient(clientSocket.getInetAddress()));
 
                 /*
@@ -48,6 +48,8 @@ public class ServerApp {
                                 new OutputStreamWriter(
                                         clientSocket.getOutputStream(), StandardCharsets.UTF_8)),
                         true);
+
+                // 클라이언트 접속 시 "OOOO님 반갑습니다!" 출력
                 writer.println(ChatServer.greeting(clientSocket));
 
                 // 클라이언트 → 서버 전송: 서버에서 클라이언트 소켓의 입력 스트림 사용
@@ -55,6 +57,7 @@ public class ServerApp {
                         new InputStreamReader(
                                 clientSocket.getInputStream(), StandardCharsets.UTF_8));
 
+                // 클라이언트로부터 받은 메시지를 서버에서 출력하고, 클라이언트에게도 송출
                 String content;
                 while ((content = reader.readLine()) != null) {
                     Chat chat = ChatServer.clientsChat(clientSocket.getInetAddress(), content);
