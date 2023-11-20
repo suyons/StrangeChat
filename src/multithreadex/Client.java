@@ -5,36 +5,26 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-
 public class Client {
     public static void main(String[] args) {
         try (Socket socket = new Socket("localhost", 12345);
-             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-             BufferedReader userInput = new BufferedReader(new InputStreamReader(System.in))) {
+             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+             PrintWriter writer = new PrintWriter(socket.getOutputStream(), true)) {
 
-            // Thread to receive messages from the server
-            Thread receiveThread = new Thread(() -> {
-                try {
-                    while (true) {
-                        String serverMessage = in.readLine();
-                        if (serverMessage == null) {
-                            break;
-                        }
-                        System.out.println("Server: " + serverMessage);
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            });
-            receiveThread.start();
+            // Client continuously sends messages to the server
+            while (true) {
+                // Get user input
+                BufferedReader userInput = new BufferedReader(new InputStreamReader(System.in));
+                System.out.print("Enter message for server: ");
+                String message = userInput.readLine();
 
-            // Send messages to the server
-            String userInputMessage;
-            while ((userInputMessage = userInput.readLine()) != null) {
-                out.println(userInputMessage);
+                // Send the message to the server
+                writer.println(message);
+
+                // Receive and display the server's response
+                String serverResponse = reader.readLine();
+                System.out.println("Server: " + serverResponse);
             }
-
         } catch (IOException e) {
             e.printStackTrace();
         }

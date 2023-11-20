@@ -5,30 +5,29 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-
 public class ClientHandler implements Runnable {
-    private final Socket clientSocket;
-    private final BufferedReader in;
-    private final PrintWriter out;
+    private Socket clientSocket;
 
-    public ClientHandler(Socket clientSocket, PrintWriter out) throws IOException {
+    public ClientHandler(Socket clientSocket) {
         this.clientSocket = clientSocket;
-        this.out = out;
-        this.in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
     }
 
     @Override
     public void run() {
-        try {
+        try (
+            BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            PrintWriter writer = new PrintWriter(clientSocket.getOutputStream(), true)
+        ) {
+            // Server continuously listens for messages from the client
             while (true) {
-                String message = in.readLine();
-                if (message == null) {
-                    break;
+                String clientMessage = reader.readLine();
+                if (clientMessage == null) {
+                    break;  // Exit the loop if the client disconnects
                 }
-                System.out.println("Received message from client: " + message);
+                System.out.println("Client: " + clientMessage);
 
-                // Broadcast the message to all clients
-                Server.broadcast(message);
+                // Server sends a response back to the client
+                writer.println("Server received: " + clientMessage);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -41,4 +40,3 @@ public class ClientHandler implements Runnable {
         }
     }
 }
-
