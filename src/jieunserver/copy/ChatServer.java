@@ -1,16 +1,22 @@
 package jieunserver.copy;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.HashMap;
+import java.util.Iterator;
 
-import common.*;
+import common.Chat;
+import common.Constants;
+import common.User;
 
 public class ChatServer {
     // userMap: K=IP주소, V=닉네임 + ChatMap: K=타임스탬프, V=대화내용
     private static HashMap<InetAddress, String> userMap = new HashMap<InetAddress, String>();
     private static HashMap<Long, String> chatMap = new HashMap<Long, String>();
 
+    
     // userMap에서 K=IP주소 넣고 V=닉네임 꺼내기
     static String getUserName(InetAddress ipAddr) {
         return userMap.get(ipAddr);
@@ -25,6 +31,28 @@ public class ChatServer {
     static void addUser(User user) {
         userMap.put(user.ipAddr, user.userName);
     }
+    
+    
+    // User.csv 파일에 IP주소, 닉네임 기록
+    static void addUserCsv() {
+    	Iterator<InetAddress> ir = userMap.keySet().iterator();
+    	while(ir.hasNext()) {
+    		InetAddress key = ir.next();
+    		String userName = userMap.get(key);
+    		
+    		try(FileWriter fw = new FileWriter("User.csv")){
+    			fw.write(userName);
+    			
+    		} catch (IOException e) {
+    			e.printStackTrace();
+    		}
+    		
+    		
+    	}
+    	
+    	
+    }
+    
 
     // chatMap에서 <K, V> 1쌍 추가
     static void addChat(Chat chat) {
@@ -75,5 +103,14 @@ public class ChatServer {
     static void changeUserName(String name) {
         // HashMap의 Value 수정
         // CSV 파일에 저장된 내용 수정
+    }
+    
+    public static void main(String[] args) {
+    	//파일에 내용 입력
+		try(FileWriter fw = new FileWriter("User.csv")){
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
     }
 }
