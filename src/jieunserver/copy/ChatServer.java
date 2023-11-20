@@ -30,27 +30,7 @@ public class ChatServer {
     // userMap에서 <K, V> 1쌍 추가
     static void addUser(User user) {
         userMap.put(user.ipAddr, user.userName);
-    }
-    
-    
-    // User.csv 파일에 IP주소, 닉네임 기록
-    static void addUserCsv() {
-    	Iterator<InetAddress> ir = userMap.keySet().iterator();
-    	while(ir.hasNext()) {
-    		InetAddress key = ir.next();
-    		String userName = userMap.get(key);
-    		
-    		try(FileWriter fw = new FileWriter("User.csv")){
-    			fw.write(userName);
-    			
-    		} catch (IOException e) {
-    			e.printStackTrace();
-    		}
-    		
-    		
-    	}
-    	
-    	
+        
     }
     
 
@@ -58,6 +38,48 @@ public class ChatServer {
     static void addChat(Chat chat) {
         chatMap.put(chat.timestamp, chat.content);
     }
+    
+	// User.csv 파일에 IP주소, 닉네임 기록
+	static void addUserCsv(InetAddress InetAddress) {
+		Iterator<InetAddress> ir = userMap.keySet().iterator();
+		while (ir.hasNext()) {
+			InetAddress key = ir.next();
+			String userName = userMap.get(key);
+
+			try (FileWriter fw = new FileWriter("User.csv")) {
+				String IpAdress = InetAddress.getHostAddress();
+				fw.write(IpAdress);
+				fw.write(", ");
+				fw.write(userName);
+
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+		}
+	}
+	
+	// Chat.csv 파일에 IP주소, 닉네임 기록
+		static void addChatCsv(InetAddress InetAddress) {
+			Iterator<InetAddress> ir = userMap.keySet().iterator();
+			while (ir.hasNext()) {
+				InetAddress key = ir.next();
+				String userName = userMap.get(key);
+
+				try (FileWriter fw = new FileWriter("Chat.csv")) {
+					String IpAdress = InetAddress.getHostAddress();
+					fw.write(IpAdress);
+					fw.write(", ");
+					fw.write(userName);
+
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+
+			}
+		}
+    
+    
 
     // ServerSocket 생성 이후 클라이언트 대기 메시지 출력
     // [시스템] 글머리: 서버에서만 보입니다. 클라이언트로 전송하지 않습니다.
@@ -105,12 +127,12 @@ public class ChatServer {
         // CSV 파일에 저장된 내용 수정
     }
     
-    public static void main(String[] args) {
-    	//파일에 내용 입력
-		try(FileWriter fw = new FileWriter("User.csv")){
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-    }
+//    public static void main(String[] args) {
+//    	//파일에 내용 입력
+//		try(FileWriter fw = new FileWriter("User.csv")){
+//			
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//    }
 }
