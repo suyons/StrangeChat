@@ -47,7 +47,7 @@ public class ClientApp {
             }
 
         } catch (ConnectException e) {
-            System.out.println("[시스템] 서버를 찾지 못했습니다.");
+            System.out.println(Constants.SYSTEM_NAME + "서버를 찾지 못했습니다.");
         } catch (IOException e) {
             e.printStackTrace();
         }
