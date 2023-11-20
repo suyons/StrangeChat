@@ -1,9 +1,11 @@
 package server;
 
 import java.net.InetAddress;
+import java.net.Socket;
 import java.util.HashMap;
 
-import common.*;
+import common.Chat;
+import common.User;
 
 public class ChatServer {
     private static HashMap<InetAddress, String> userMap = new HashMap<InetAddress, String>();
@@ -23,5 +25,9 @@ public class ChatServer {
 
     public static void addChat(Chat chat) {
         chatMap.put(chat.timestamp, chat.content);
+    }
+
+    public static String greeting(Socket clientSocket) {
+        return getUserName(clientSocket.getInetAddress()) + "님 반갑습니다!";
     }
 }
