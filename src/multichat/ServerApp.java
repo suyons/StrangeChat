@@ -1,4 +1,4 @@
-package server;
+package multichat;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -8,9 +8,12 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.nio.charset.StandardCharsets;
 
-import common.*;
+import common.Chat;
+import common.Constants;
+import common.User;
 
 public class ServerApp {
     public static void main(String[] args) {
@@ -67,10 +70,10 @@ public class ServerApp {
                 }
 
             }
+        } catch (SocketException e) {
+            System.out.println(Constants.SYSTEM_NAME + "클라이언트의 연결이 종료되었습니다.");
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            serverSocket.close();
         }
     }
 }
