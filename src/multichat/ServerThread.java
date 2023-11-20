@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class ServerThread extends Thread {
-	
+	//ㅈㅈ
 	private Socket socket;
 	private ArrayList<ServerThread> threadList;
 	private BufferedReader in = null;
