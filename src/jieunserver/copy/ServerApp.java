@@ -66,8 +66,8 @@ public class ServerApp {
                     Chat chat = ChatServer.clientsChat(clientSocket.getInetAddress(), content);
                     System.out.println(chat);
                     writer.println(chat);
-                  //Chat.csv 파일에 시간, 유저닉네임, 대화내용 넣기
-                	ChatServer.addChatCsv(clientSocket.getInetAddress());
+                    //Chat.csv 파일에 시간, 유저닉네임, 대화내용 넣기
+                	ChatServer.addChatCsv(serverSocket.getInetAddress());
                 }
             }
         } catch (IOException e) {

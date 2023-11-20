@@ -48,11 +48,14 @@ public class ChatServer {
 			ipAddr = ir.next();
 			String userName = userMap.get(ipAddr);
 
-			try (FileWriter fw = new FileWriter("User.csv")) {
+			try (FileWriter fw = new FileWriter("User.csv", true)) { //true 파일을 초기화하지 않고 그대로 이어쓰는 방식
 				String IpAdress = ipAddr.getHostAddress();
+				
+				fw.write("\n");
 				fw.write(IpAdress);
 				fw.write(", ");
 				fw.write(userName);
+				
 
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -62,19 +65,20 @@ public class ChatServer {
 	}
 	
 	// Chat.csv 파일에 시간, 대화내용, 닉네임 입력
-		static void addChatCsv(InetAddress ipAddr) {
+		public static void addChatCsv(InetAddress ipAddr) {
 			Iterator<Long> ir = chatMap.keySet().iterator();
 			while (ir.hasNext()) {
 				Long timestamp = ir.next();
 				String chat = chatMap.get(timestamp);
 				String userName = userMap.get(ipAddr);
-
-				try (FileWriter fw = new FileWriter("Chat.csv")) {
-					Chat ch = new Chat();
-					String time = Chat.hourMinute(ch.timestamp);
+				String time = Chat.hourMinute(timestamp);
+				
+				try (FileWriter fw = new FileWriter("Chat.csv",true)) {
+					
+					fw.write("\n");
 					fw.write(time);
 					fw.write(", ");
-					fw.write(userName);
+					fw.write(userName); //여기서 IOException
 					fw.write(", ");
 					fw.write(chat);
 

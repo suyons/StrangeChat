@@ -11,6 +11,7 @@ import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 
 import common.Constants;
+import jieunserver.copy.ChatServer;
 
 public class ClientApp {
     public static void main(String[] args) {
@@ -44,6 +45,7 @@ public class ClientApp {
                 System.out.println(reader.readLine());
                 System.out.print("＞ ");
                 writer.println(userInput.readLine());
+             
             }
 
         } catch (ConnectException e) {
