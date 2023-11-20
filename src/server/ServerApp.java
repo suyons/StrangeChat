@@ -1,7 +1,9 @@
 package server;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
@@ -19,12 +21,12 @@ public class ServerApp {
             while (true) {
                 // serverSocket.accept(): 연결된 Socket 객체를 반환
                 Socket clientSocket = serverSocket.accept();
-                System.out.println(ChatServer.newClient(clientSocket.getInetAddress()));
-
                 // V HashMap.get(K): HashMap에서 K에 해당하는 V 페어가 없다면 null을 반환
                 if (ChatServer.getUserName(clientSocket.getInetAddress()) == null)
-                    // 1개의 K-V 페어 레코드를 HashMap에 추가
+                    // 기존 접속 기록이 없다면 K-V 페어 레코드를 HashMap에 추가
                     ChatServer.addUser(new User(clientSocket.getInetAddress()));
+                // HashMap에서 이름 불러와서 "OOOO님 반갑습니다" 출력
+                System.out.println(ChatServer.newClient(clientSocket.getInetAddress()));
 
                 /*
                  * ■ OutputStream on Network
@@ -40,13 +42,25 @@ public class ServerApp {
                  * to send data to the server.
                  */
 
-                // PrintWriter(OutputStream out, boolean autoFlush)
-                PrintWriter out = new PrintWriter(
+                // 서버 → 클라이언트 전송: 서버에서 클라이언트 소켓의 출력 스트림 사용
+                PrintWriter writer = new PrintWriter(
                         new BufferedWriter(
                                 new OutputStreamWriter(
-                                        clientSocket.getOutputStream(), StandardCharsets.UTF_8)), true);
-                out.println(ChatServer.greeting(clientSocket));
-                
+                                        clientSocket.getOutputStream(), StandardCharsets.UTF_8)),
+                        true);
+                writer.println(ChatServer.greeting(clientSocket));
+
+                // 클라이언트 → 서버 전송: 서버에서 클라이언트 소켓의 입력 스트림 사용
+                BufferedReader reader = new BufferedReader(
+                        new InputStreamReader(
+                                clientSocket.getInputStream(), StandardCharsets.UTF_8));
+
+                String content;
+                while ((content = reader.readLine()) != null) {
+                    Chat chat = ChatServer.clientsChat(clientSocket.getInetAddress(), content);
+                    System.out.println(chat);
+                    writer.println(chat);
+                }
 
             }
         } catch (IOException e) {

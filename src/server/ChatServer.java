@@ -29,15 +29,16 @@ public class ChatServer {
     static Chat waiting() {
         Chat chat = new Chat();
         chat.content = Constants.SYSTEM_NAME + Chat.hourMinute(chat.timestamp)
-        + Constants.SERVER_PORT + "번 포트 연결 대기 중입니다.";
+                + Constants.SERVER_PORT + "번 포트 연결 대기 중입니다.";
         addChat(chat);
         return chat;
     }
 
-    static Chat newClient(InetAddress addr) {
+    static Chat newClient(InetAddress ipAddr) {
+        
         Chat chat = new Chat();
         chat.content = Constants.SYSTEM_NAME + Chat.hourMinute(chat.timestamp)
-        + "새 클라이언트 연결: " + addr;
+                + "새 클라이언트 연결: " + ipAddr + " <" + getUserName(ipAddr) + ">";
         addChat(chat);
         return chat;
     }
@@ -45,7 +46,14 @@ public class ChatServer {
     static Chat greeting(Socket clientSocket) {
         Chat chat = new Chat();
         chat.content = Constants.SERVER_NAME + Chat.hourMinute(chat.timestamp)
-        + getUserName(clientSocket.getInetAddress()) + "님 반갑습니다!";
+                + getUserName(clientSocket.getInetAddress()) + "님 반갑습니다!";
+        addChat(chat);
+        return chat;
+    }
+
+    static Chat clientsChat(InetAddress ipAddr, String content) {
+        Chat chat = new Chat();
+        chat.content = "[" + getUserName(ipAddr) + "] " + Chat.hourMinute(chat.timestamp) + content;
         addChat(chat);
         return chat;
     }
