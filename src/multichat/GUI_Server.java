@@ -22,7 +22,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-public class MultiChatServer extends JFrame implements ActionListener{
+import common.Constants;
+import common.User;
+
+public class GUI_Server extends JFrame implements ActionListener {
 
 	private JPanel panelCenter;
 	private JPanel panelSouth;
@@ -31,17 +34,19 @@ public class MultiChatServer extends JFrame implements ActionListener{
 	private JButton btn;
 	private JButton btn2;
 	
-	private JTextArea ta;
+	private JTextArea textArea;
 	
-	private ServerSocket server = null; 
-	private Socket socket = null;		//여러개의 소켓을 받을거기 때문에 제거
-//	private BufferedReader in = null;	//인아웃필요없음
-//	private BufferedWriter out = null;
+	// private Socket socket = null;		//여러개의 소켓을 받을거기 때문에 제거
+
+	/* Buffered 보조 스트림은 ServerThread의 run()에서 인스턴스화하므로
+	 * 여기에서 생성할 필요가 없다.
+	 */
+	// private BufferedReader in = null;
+	// private BufferedWriter out = null;
 	
 	private ArrayList<ServerThread> threadList = new ArrayList<>();
 	
-	
-	public MultiChatServer(String title, int width, int height) {
+	public GUI_Server(String title, int width, int height) {
 		
 		setTitle(title);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -58,22 +63,26 @@ public class MultiChatServer extends JFrame implements ActionListener{
 		
 	}
 	public void setSocketServer() {
-		try {
-			Time time = new Time();
-			
-			server = new ServerSocket(9999);
-			ta.append(">>연결 대기중...\n");
+		try (ServerSocket serverSocket = new ServerSocket(Constants.SERVER_PORT)) {
+            System.out.println(ChatServer.waiting());
 			
 			//여러개가 엑셉트 되어야함
 			while(true) {
-				Socket socket = server.accept();		//소켓을 엑셉트 시킴
-				ta.append("연결 되었습니다!!!\n");	//연결될때마다 리스트를 만들고 add로 스레드리스트 추가
+				// serverSocket.accept(): 연결된 Socket 객체를 반환
+				Socket clientSocket = serverSocket.accept();
+
+				if (ChatServer.getUserName(clientSocket.getInetAddress()) == null)
+					// 기존 접속 기록이 없다면 K-V 페어 레코드를 HashMap에 추가
+                    ChatServer.addUser(new User(clientSocket.getInetAddress()));
+
+				textArea.append("연결 되었습니다!!!\n");	//연결될때마다 리스트를 만들고 add로 스레드리스트 추가
 				ServerThread st = new ServerThread(socket, threadList);
 				//서버 스레드 생성 후 클래스로 생성
 				//소켓을 리셋시킬거임
 				//스레드리스트를 만들거임
 				threadList.add(st);				//접속된 정보를 추가함
-				st.start();					//스레드이기때문에 스타트가 걸려야함
+				// Causes this thread to begin execution; the Java Virtual Machine calls the run method of this thread.
+				st.start();
 			}
 			
 		} catch (IOException e) {
@@ -93,10 +102,10 @@ public class MultiChatServer extends JFrame implements ActionListener{
 		panelCenter.setBackground(Color.BLUE);
 		panelCenter.setLayout(new BorderLayout());
 		
-		ta = new JTextArea(7,18);
-		ta.setLineWrap(true);
-		ta.setEditable(false);
-		JScrollPane sp = new JScrollPane(ta,
+		textArea = new JTextArea(7,18);
+		textArea.setLineWrap(true);
+		textArea.setEditable(false);
+		JScrollPane sp = new JScrollPane(textArea,
 				JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		
@@ -140,7 +149,7 @@ public class MultiChatServer extends JFrame implements ActionListener{
 //			out.write(outMessage + "\n");	//try캐치문 실행
 //			out.flush();
 //			
-//			ta.append("[서버]  "+time.timeInfo()+ "\n" + outMessage + "\n");
+//			textArea.append("[서버]  "+time.timeInfo()+ "\n" + outMessage + "\n");
 //			tf.setText("");
 //			tf.requestFocus();
 //		} catch (IOException e) {
@@ -156,11 +165,11 @@ public class MultiChatServer extends JFrame implements ActionListener{
 		
 	}
 	public JTextArea getTa() {
-		return ta;
+		return textArea;
 	}
 	
 	public static void main(String[] args) {
-		MultiChatServer cs = new MultiChatServer("채팅서버", 300, 400);
+		GUI_Server cs = new GUI_Server("채팅서버", 300, 400);
 		cs.setSocketServer();
 		
 	}
