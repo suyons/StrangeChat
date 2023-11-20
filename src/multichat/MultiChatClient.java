@@ -19,7 +19,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 public class MultiChatClient extends JFrame implements ActionListener{
-
+//ㅈㅈ
 	private JPanel panelCenter;
 	private JPanel panelSouth;
 	
