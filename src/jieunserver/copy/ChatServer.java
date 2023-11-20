@@ -11,6 +11,8 @@ import common.Chat;
 import common.Constants;
 import common.User;
 
+
+// 지은 파일 입출력 추가
 public class ChatServer {
     // userMap: K=IP주소, V=닉네임 + ChatMap: K=타임스탬프, V=대화내용
     private static HashMap<InetAddress, String> userMap = new HashMap<InetAddress, String>();
