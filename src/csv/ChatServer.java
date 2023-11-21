@@ -1,4 +1,4 @@
-package jieunserver.copy;
+package csv;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -72,7 +72,7 @@ public class ChatServer {
 			while (ir.hasNext()) {
 				Long timestamp = ir.next();
 				String time = Chat.hourMinute(timestamp);
-				String userName = userMap.get(ipAddr);
+//				String userName = userMap.get(ipAddr);
 				String chat = chatMap.get(timestamp);
 				
 				try (FileWriter fw = new FileWriter("Chat.csv")) {

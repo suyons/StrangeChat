@@ -1,4 +1,4 @@
-package jieunserver.copy;
+package csv;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
