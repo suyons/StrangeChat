@@ -30,7 +30,7 @@ public class ClientApp {
                 BufferedReader userInput = new BufferedReader(
                         new InputStreamReader(System.in, StandardCharsets.UTF_8))) {
             while (true) {
-                // readLine(): 스트림에 들어온 것이 없다면 null을 반환한다.
+                // readLine(): 서버의 출력 스트림 → 클라이언트 입력 스트림에 들어온 것이 없다면 null을 반환한다.
                 System.out.println(reader.readLine());
                 System.out.print("＞ ");
 

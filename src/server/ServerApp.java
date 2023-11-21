@@ -17,8 +17,8 @@ public class ServerApp {
             while (true) {
                 // serverSocket.accept(): 연결된 클라이언트의 Socket형 객체를 반환
                 Socket clientSocket = serverSocket.accept();
+                
                 // V HashMap.get(K): HashMap에서 K에 해당하는 V 페어가 없다면 null을 반환
-
                 if (ChatServer.getUserName(clientSocket.getInetAddress()) == null)
                     // 기존 접속 기록이 없다면 K-V 페어 레코드를 HashMap에 추가
                     ChatServer.addUser(new User(clientSocket.getInetAddress()));
