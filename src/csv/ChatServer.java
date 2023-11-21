@@ -16,7 +16,7 @@ import common.User;
 // 지은 파일 입출력 추가
 public class ChatServer {
     // userMap: K=IP주소, V=닉네임 + ChatMap: K=타임스탬프, V=대화내용
-    private static HashMap<InetAddress, String> userMap = new HashMap<InetAddress, String>();
+    private static HashMap<InetAddress, String> userMap = new LinkedHashMap<InetAddress, String>();
     private static HashMap<Long, String> chatMap = new LinkedHashMap<Long, String>();
 
     
@@ -43,12 +43,9 @@ public class ChatServer {
     
 	// User.csv 파일에 IP주소, 닉네임 기록
 	static void addUserCsv(InetAddress ipAddr) {
-		
-
-			try (FileWriter fw = new FileWriter("User.csv")) { //true 파일을 초기화하지 않고 그대로 이어쓰는 방식
-				
-				fw.write("IP주소, 닉네임");
-				
+			
+			try(FileWriter fw = new FileWriter("User.csv", true)) { 
+//				fw.write("IP주소, 닉네임");
 				Iterator<InetAddress> ir = userMap.keySet().iterator();
 				while (ir.hasNext()) {
 					ipAddr = ir.next();
@@ -71,12 +68,10 @@ public class ChatServer {
 	
 	
 	// Chat.csv 파일에 시간, 대화내용, 닉네임 입력
-		public static void addChatCsv(InetAddress ipAddr) throws IOException {
+		public static void addChatCsv(InetAddress ipAddr) {
 				
-				try (FileWriter fw = new FileWriter("Chat.csv")) {
-					
-					fw.write("시간, 닉네임, 대화내용");
-					
+				try(FileWriter fw = new FileWriter("Chat.csv", true)) {
+//					fw.write("시간, 닉네임, 대화내용");
 					//대화 출력을 위한 반복자
 					Iterator<Long> chatIr = chatMap.keySet().iterator();
 					while (chatIr.hasNext()) {

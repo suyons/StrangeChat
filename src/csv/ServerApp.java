@@ -14,13 +14,19 @@ import common.*;
 
 public class ServerApp {
     public static void main(String[] args) {
+    	
+    	ServerSocket serverSocket = null;
+    	Socket clientSocket = null;
+    	
+    	
         // IP주소와 포트를 지정하여 ServerSocket 객체 생성
-        try (ServerSocket serverSocket = new ServerSocket(Constants.SERVER_PORT)) {
+        try {
+        	serverSocket = new ServerSocket(Constants.SERVER_PORT);
             System.out.println(ChatServer.waiting());            
 
             while (true) {
                 // serverSocket.accept(): 연결된 Socket 객체를 반환
-                Socket clientSocket = serverSocket.accept();
+                clientSocket = serverSocket.accept();
                 // V HashMap.get(K): HashMap에서 K에 해당하는 V 페어가 없다면 null을 반환
                 
                 if (ChatServer.getUserName(clientSocket.getInetAddress()) == null)
@@ -69,10 +75,19 @@ public class ServerApp {
                     writer.println(chat);	//서버 -> 클라이언트에게 chat 전송
                     //Chat.csv 파일에 시간, 유저닉네임, 대화내용 넣기
                 	ChatServer.addChatCsv(serverSocket.getInetAddress());
+                	if(content.equals("/종료")) {
+                	try {
+                		clientSocket.close();
+                		serverSocket.close();
+                		System.out.println("(/종료)대화가 종료되었습니다.");
+                	} catch(IOException e) {
+                		System.out.println("에러로 인해 종료되었습니다.");
+                		System.out.println(e);
+                	}}
+                	}
                 }
-            }
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        } 
     }
 }
