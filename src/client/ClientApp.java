@@ -26,14 +26,18 @@ public class ClientApp {
                         new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
                 // 클라이언트 Socket의 출력 스트림: 클라이언트 → 서버 전송 시 사용
                 PrintWriter writer = new PrintWriter(new BufferedWriter(
-                        new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8)), true)) {
-            while (true) {
+                        new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8)), true);
                 BufferedReader userInput = new BufferedReader(
-                        new InputStreamReader(System.in, StandardCharsets.UTF_8));
+                        new InputStreamReader(System.in, StandardCharsets.UTF_8))) {
+            while (true) {
                 // readLine(): 스트림에 들어온 것이 없다면 null을 반환한다.
                 System.out.println(reader.readLine());
                 System.out.print("＞ ");
-                writer.println(userInput.readLine());
+                String content;
+                while ((content = userInput.readLine()).trim().isEmpty()) {
+                    System.out.print("＞ ");
+                }
+                writer.println(content);
             }
 
         } catch (ConnectException e) {
