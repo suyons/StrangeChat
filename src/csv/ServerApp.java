@@ -20,24 +20,26 @@ public class ServerApp {
 
 		// IP주소와 포트를 지정하여 ServerSocket 객체 생성
 		try {
-			serverSocket = new ServerSocket(Constants.SERVER_PORT);
-			System.out.println(ChatServer.waiting());
-			
-			// 이전 대화목록 다시 보여주기 - chatMap에 있던 대화내용 보여주기 - HashMap을 이용해서 보여주기!
-			CSVReader csvReader = new CSVReader();
-			csvReader.readCSV();
-			ChatServer.printChatmap();
+			serverSocket = new ServerSocket(Constants.SERVER_PORT);	//서버소캣 생성
+			System.out.println(ChatServer.waiting());	//클라이언트 대기 메시지 출력
 			
 			while (true) {
-				// serverSocket.accept(): 연결된 Socket 객체를 반환
-				clientSocket = serverSocket.accept();
+				clientSocket = serverSocket.accept(); // serverSocket.accept(): 연결된 Socket 객체를 반환
+				
+				// 이전 대화목록 다시 보여주기 - chatMap에 있던 대화내용 보여주기
+				CSVReader csvReader = new CSVReader(); //csv파일 hashmap에 저장하는 클래스
+				csvReader.readCSV();	//csv파일 hashmap에 저장하는 메서드
+				ChatServer.printChatmap(); //이전 대화내용 출력
+				
 				// V HashMap.get(K): HashMap에서 K에 해당하는 V 페어가 없다면 null을 반환
-
-				if (ChatServer.getUserName(clientSocket.getInetAddress()) == null)
-					// 기존 접속 기록이 없다면 K-V 페어 레코드를 HashMap에 추가
+				// getUserName() : K값 ip주소 넣어서 V값 가져오기
+				// 기존 접속 기록이 없다면 K-V 페어 레코드를 HashMap에 추가
+				if (ChatServer.getUserName(clientSocket.getInetAddress()) == null) {
+					//첫 방문자 새로운 닉네임 주고 기록을 user맵에 저장 $$$$$$$$$$$$$$$$$필터가 필요한가..?
 					ChatServer.addUser(new User(clientSocket.getInetAddress()));
-				// User.csv 파일에 유저 아이피주소, 닉네임 넣기
-				ChatServer.addUserCsv(clientSocket.getInetAddress());
+					// User.csv 파일에 생성된 유저 아이피주소, 닉네임 저장하기 
+					ChatServer.addUserCsv(clientSocket.getInetAddress());
+				}
 				// "새 클라이언트 연결: IP주소" 출력
 				System.out.println(ChatServer.newClient(clientSocket.getInetAddress()));
 

@@ -21,7 +21,7 @@ public class ChatServer {
 	
 	
 	//키값, 밸류값 매개변수로 받아서 챗맵에 저장하기
-	public static void putCsv(Long time, String chat) {
+	public static void putChatmap(Long time, String chat) {
 		chatMap.put(time, chat);
 	}
 	
@@ -60,14 +60,13 @@ public class ChatServer {
 	// User.csv 파일에 IP주소, 닉네임 기록
 	static void addUserCsv(InetAddress ipAddr) {
 
-		try (FileWriter fw = new FileWriter("User.csv", true)) {
-			Iterator<InetAddress> ir = userMap.keySet().iterator();
+		try (FileWriter fw = new FileWriter("User.csv", true)) 
+		{ Iterator<InetAddress> ir = userMap.keySet().iterator();
 			while (ir.hasNext()) {
 				ipAddr = ir.next();
 				String userName = userMap.get(ipAddr);
-
-				String IpAdress = ipAddr.getHostAddress();
-
+				String IpAdress = ipAddr.getHostAddress(); //getHostAddress는 IP주소 자료형을 InetAddress -> String 
+				//csv파일에 아이피주소, 닉네임 저장
 				fw.write("\n");
 				fw.write(IpAdress);
 				fw.write(",");

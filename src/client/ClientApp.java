@@ -21,6 +21,7 @@ public class ClientApp {
 				 * InputStreamReader 단독으로도 UTF-8 인코딩을 지원하므로 한글 표현에 지장은 없으나 기반 스트림은 바이트 단위로 읽는 것에
 				 * 비해 Buffered 스트림은 8KB 단위로 읽어 효율적이다.
 				 */
+				
 				// 클라이언트 Socket의 입력 스트림: 서버 → 클라이언트 전송 시 사용
 				BufferedReader reader = new BufferedReader(
 						new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
@@ -28,6 +29,7 @@ public class ClientApp {
 				PrintWriter writer = new PrintWriter(
 						new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8)),
 						true)) {
+			
 			while (true) {
 				/*
 				 * 사용자의 문자열 입력을 받는 스트림 Scanner 스트림이 익숙해서 쓰고 싶은데 close()를 어디에 해야 할 지 모르겠다..
@@ -41,12 +43,11 @@ public class ClientApp {
 				System.out.print("＞ ");
 				 // 입력 없이 Enter 클릭한다면 끝까지 > 를 표시하여 입력을 받아낸다.
                 String content;
-                while ((content = userInput.readLine()).trim().isEmpty()) {
+                while ((content = userInput.readLine()).trim().isEmpty()) { //trim() : 문자열 앞뒤 공백 제거, isEmpty(): 문자열 비었는지
                     System.out.print("＞ ");
                 }
                 // 입력된 문자열을 서버로 전송한다.
                 writer.println(content);
-//              writer.println(userInput.readLine()); 
 			}
 		} catch (ConnectException e) {
 			System.out.println(Constants.SYSTEM_NAME + "서버를 찾지 못했습니다.");
