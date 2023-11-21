@@ -18,7 +18,7 @@ public class ServerThread extends Thread {
     private BufferedReader reader;
     private PrintWriter writer;
     final String CLIENT_IP;
-    
+
     public ServerThread(Socket clientSocket) {
         this.clientSocket = clientSocket;
         CLIENT_IP = clientSocket.getInetAddress().getHostAddress();
@@ -89,9 +89,9 @@ public class ServerThread extends Thread {
     }
 
     private void broadcastMsg(Chat chat) {
-        if(chat != null)
+        if (chat != null)
             for (ServerThread thread : ChatServer.getThreadList()) {
                 thread.writer.println(chat.toString());
-        }
+            }
     }
 }

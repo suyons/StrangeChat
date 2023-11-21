@@ -141,7 +141,7 @@ public class SwingClientApp extends JFrame implements ActionListener {
 				} catch (SocketException e) {
 					textArea.append(Constants.SYSTEM_NAME + "서버와의 연결에 실패했습니다.\n");
 				}
-				
+
 				scrollBar.setValue(scrollBar.getMaximum());
 			}
 		} catch (ConnectException e) {

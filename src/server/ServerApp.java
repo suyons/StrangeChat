@@ -27,7 +27,7 @@ public class ServerApp {
                  * Part II: 멀티스레딩, 클라이언트 스레드를 ArrayList에 추가하고
                  * ClientThread 클래스의 run()을 수행
                  */
-                
+
                 ServerThread thread = new ServerThread(clientSocket);
                 ChatServer.getThreadList().add(thread);
                 thread.start();
