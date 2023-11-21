@@ -53,7 +53,7 @@ public class ChatServer {
 
 				fw.write("\n");
 				fw.write(IpAdress);
-				fw.write(", ");
+				fw.write(",");
 				fw.write(userName);
 
 			}
@@ -83,9 +83,9 @@ public class ChatServer {
 
 					fw.write("\n");
 					fw.write(time);
-					fw.write(", ");
+					fw.write(",");
 					fw.write(userName); 
-					fw.write(", ");
+					fw.write(",");
 					fw.write(chat);
 				}
 			}

@@ -8,12 +8,10 @@ public class CSVReader {
 	
 	// Chat.csv 파일 읽어오기 -> [발신자] (시간) 내용 형식으로 다시 대화출력창에 나와야함. 
 	
-	public void readCSV() {
+	public String readCSV() {
 		
 		String line;
-		String time = null;
-		String name = null;
-		String content = null;
+
 		//Chat.csv - (배열 분류)
 		try(BufferedReader fr = new BufferedReader(new FileReader("Chat.cvs"))){
 			
@@ -22,18 +20,19 @@ public class CSVReader {
 				
 				for(int i = 3; i < data.length; i++) {
 					if(i%3 == 0) {
-						time = data[i];
+						String time = data[i];
 					} else if(i%3 == 1) {
-						name = data[i];
+						String name = data[i];
 					} else if(i%3 == 2) {
-						content = data[i];
+						String content = data[i];
 					} else break;
-				} System.out.println("[" + name + "] " + time + content);
+				} 
 			} fr.close();
 		} catch(IOException e) {
 			e.printStackTrace();
-		}
-	}
+		} return ("[" + name + "] " + "(" + time + ")" + content);
+	} 
+}
 	
 //	// 클라이언트가 전송한 채팅을 chatMap에 저장하고, [발신자] (시간) 내용 형식으로 반환
 //	// [사용자명] 글머리: 모든 클라이언트와 서버에서 표시됩니다.
@@ -44,4 +43,4 @@ public class CSVReader {
 //		return "[" + getUserName(ipAddr) + "] " + Chat.hourMinute(chat.timestamp) + content;
 //	}
 	
-}
+
