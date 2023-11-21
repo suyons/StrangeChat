@@ -10,7 +10,6 @@ public class Chat {
 	public final long timestamp;
 	// chatMap의 Value: 대화내용
 	public String content = "";
-//	public String onlyContent; //입력된 메시지만
 
 	// 생성자 → 현재 시각의 UNIX Timestamp를 입력
 	/* UNIX 시간: 1970-01-01 00:00 (UTC)부터 지금까지 몇 초 지났니? */

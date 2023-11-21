@@ -39,7 +39,14 @@ public class ClientApp {
 				// readLine(): 스트림에 들어온 것이 없다면 null을 반환한다.
 				System.out.println(reader.readLine());
 				System.out.print("＞ ");
-				writer.println(userInput.readLine());
+				 // 입력 없이 Enter 클릭한다면 끝까지 > 를 표시하여 입력을 받아낸다.
+                String content;
+                while ((content = userInput.readLine()).trim().isEmpty()) {
+                    System.out.print("＞ ");
+                }
+                // 입력된 문자열을 서버로 전송한다.
+                writer.println(content);
+//              writer.println(userInput.readLine());
 
 			}
 

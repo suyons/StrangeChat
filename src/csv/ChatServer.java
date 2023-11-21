@@ -43,7 +43,6 @@ public class ChatServer {
 	static void addUserCsv(InetAddress ipAddr) {
 
 		try (FileWriter fw = new FileWriter("User.csv", true)) {
-//				fw.write("IP주소, 닉네임");  이거 이어쓰기모드(true)에서는 적용하면 계속 추가됨
 			Iterator<InetAddress> ir = userMap.keySet().iterator();
 			while (ir.hasNext()) {
 				ipAddr = ir.next();
@@ -62,38 +61,38 @@ public class ChatServer {
 		}
 
 	}
-
-	// Chat.csv 파일에 시간, 대화내용, 닉네임 입력
-	public static void addChatCsv(InetAddress ipAddr) {
-
-		try (FileWriter fw = new FileWriter("Chat.csv", true)) {
-//					fw.write("시간, 닉네임, 대화내용"); 이거 이어쓰기모드(true)에서는 적용하면 계속 추가됨
-			// 대화 출력을 위한 반복자
-			Iterator<Long> chatIr = chatMap.keySet().iterator();
-			while (chatIr.hasNext()) {
-				Long timestamp = chatIr.next();
-				String time = Chat.dateTime(timestamp);
-				String chat = chatMap.get(timestamp);
-
-				// 유저 이름 출력을 위한 반복자
-				Iterator<InetAddress> userIr = userMap.keySet().iterator();
-				while (userIr.hasNext()) {
-					ipAddr = userIr.next();
-					String userName = userMap.get(ipAddr);
-
-					fw.write("\n");
-					fw.write(time);
-					fw.write(",");
-					fw.write(userName); 
-					fw.write(",");
-					fw.write(chat);
-				}
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
 	
+	// Chat.csv 파일에 시간, 대화내용, 닉네임 입력
+			public static void addChatCsv(InetAddress ipAddr) throws IOException {
+				try (FileWriter fw = new FileWriter("Chat.csv")) {
+					//대화 출력을 위한 반복자
+					Iterator<Long> chatIr = chatMap.keySet().iterator();
+					while (chatIr.hasNext()) {
+						Long timestamp = chatIr.next();
+						String time = Chat.dateTime(timestamp);
+						String chat = chatMap.get(timestamp);
+
+						//유저 이름 출력을 위한 반복자
+						Iterator<InetAddress> userIr = userMap.keySet().iterator();
+						while (userIr.hasNext()) {
+							ipAddr = userIr.next();
+							String userName = userMap.get(ipAddr);
+
+						fw.write("\n");
+						fw.write(time);
+						fw.write(",");
+						fw.write(userName); 	 //여기서 IOException user부분 삭제하면 저장 잘됨
+						fw.write(",");
+//						fw.write(chat);
+//						fw.write("\"" + chat + "\"");
+						fw.write('"' + chat + '"');
+					}
+				}} catch (IOException e) {
+					e.printStackTrace();
+				}
+
+			}
+					
 	//chatMap에 있는 이전 대화 목록 꺼내오기
 //	public void beforeChat() {
 //		try(FileReader fr = new FileReader("Chat.csv")){
@@ -148,12 +147,4 @@ public class ChatServer {
 	}
 
 	
-	
-	
-	// (미구현) 기능 추가 예시: 사용자명 변경
-	static void changeUserName(String name) {
-		// HashMap의 Value 수정
-		// CSV 파일에 저장된 내용 수정
-	}
-
 }

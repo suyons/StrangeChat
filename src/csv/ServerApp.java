@@ -36,23 +36,14 @@ public class ServerApp {
 				// "새 클라이언트 연결: IP주소" 출력
 				System.out.println(ChatServer.newClient(clientSocket.getInetAddress()));
 
-				/*
-				 * ■ OutputStream on Network (1) Server Side: ● The server uses the input stream
-				 * (getInputStream()) of the client's socket to read data sent by the client. ●
-				 * The server uses the output stream (getOutputStream()) of the client's socket
-				 * to send data to the client. (2) Client Side: ● Conversely, the client uses
-				 * the input stream of the server's socket to read data sent by the server. ●
-				 * The client uses the output stream of its own socket to send data to the
-				 * server.
-				 */
 
 				// 서버 → 클라이언트 전송: 서버에서 클라이언트 소켓의 출력 스트림 사용
 				PrintWriter writer = new PrintWriter(new BufferedWriter(
 						new OutputStreamWriter(clientSocket.getOutputStream(), StandardCharsets.UTF_8)), true);
 
 				// 이전 대화목록 다시 보여주기 - chatMap에 있던 대화내용 보여주기
-				CSVReader csvReader = new CSVReader();
-				writer.println(csvReader.readCSV());
+//				CSVReader csvReader = new CSVReader();
+//				writer.println(csvReader.readCSV());
 				
 				// 클라이언트 접속 시 "OOOO님 반갑습니다!" 출력
 				writer.println(ChatServer.greeting(clientSocket));
@@ -71,16 +62,6 @@ public class ServerApp {
 					writer.println(chat); // 서버 -> 클라이언트에게 chat 전송
 					// Chat.csv 파일에 시간, 유저닉네임, 대화내용 넣기
 					ChatServer.addChatCsv(serverSocket.getInetAddress());
-					if (content.equals("/종료")) {
-						try {
-							clientSocket.close();
-							serverSocket.close();
-							System.out.println("(/종료)대화가 종료되었습니다.");
-						} catch (IOException e) {
-							System.out.println("에러로 인해 종료되었습니다.");
-							System.out.println(e);
-						}
-					}
 				}
 			}
 		} catch (IOException e) {
