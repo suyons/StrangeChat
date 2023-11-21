@@ -10,12 +10,15 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.net.ConnectException;
 import java.net.Socket;
+import java.net.SocketException;
 import java.nio.charset.StandardCharsets;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -30,10 +33,11 @@ public class SwingClientApp extends JFrame implements ActionListener {
 	// TextField: 단일 행 입출력 가능 → 신규 대화 입력 영역
 	private JTextField textField;
 	private JButton button1;
-	// private JButton button2;
 
 	// TextArea: 여러 행 입출력 가능 → 대화 내용 보기 영역
 	private JTextArea textArea;
+	private JScrollPane scrollPane;
+	private JScrollBar scrollBar;
 
 	private Socket socket;
 	private BufferedReader reader;
@@ -63,9 +67,10 @@ public class SwingClientApp extends JFrame implements ActionListener {
 		textArea = new JTextArea(7, 18);
 		textArea.setLineWrap(true);
 		textArea.setEditable(false);
-		JScrollPane scrollPane = new JScrollPane(textArea,
+		scrollPane = new JScrollPane(textArea,
 				JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollBar = scrollPane.getVerticalScrollBar();
 
 		panelCenter.add(scrollPane);
 		add(panelCenter, BorderLayout.CENTER);
@@ -78,11 +83,8 @@ public class SwingClientApp extends JFrame implements ActionListener {
 		textField.addActionListener(this);
 		panelSouth.add(textField);
 
-		button1 = new JButton("전송");
+		button1 = new JButton("보내기");
 		button1.addActionListener(this);
-
-		// button2 = new JButton("전송");
-		// button2.addActionListener(this);
 
 		panelSouth.add(button1);
 
@@ -108,7 +110,8 @@ public class SwingClientApp extends JFrame implements ActionListener {
 		// textField에 작성된 메시지 전송하기
 		String content = textField.getText();
 		// while ((content = textField.getText()).trim().isEmpty()) { }
-		writer.println(content);
+		if (!content.equals(""))
+			writer.println(content);
 
 		// 메시지를 보내고 textField 내용 지우기
 		textField.setText("");
@@ -134,8 +137,16 @@ public class SwingClientApp extends JFrame implements ActionListener {
 			userInput = new BufferedReader(
 					new InputStreamReader(System.in, StandardCharsets.UTF_8));
 			while (true) {
-				textArea.append(reader.readLine() + "\n");
+				try {
+					textArea.append(reader.readLine() + "\n");
+				} catch (SocketException e) {
+					textArea.append(Constants.SYSTEM_NAME + "서버와의 연결에 실패했습니다.\n");
+				}
+				
+				scrollBar.setValue(scrollBar.getMaximum());
 			}
+		} catch (ConnectException e) {
+			textArea.append(Constants.SYSTEM_NAME + "서버와의 연결에 실패했습니다.\n");
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
@@ -144,6 +155,8 @@ public class SwingClientApp extends JFrame implements ActionListener {
 				reader.close();
 				socket.close();
 				userInput.close();
+			} catch (NullPointerException e) {
+				textArea.append("");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -151,7 +164,7 @@ public class SwingClientApp extends JFrame implements ActionListener {
 	}
 
 	public static void main(String[] args) {
-		SwingClientApp swingClient = new SwingClientApp("StrangeChat", 300, 400);
+		SwingClientApp swingClient = new SwingClientApp("StrangeChat", 400, 400);
 		swingClient.setSocket();
 	}
 

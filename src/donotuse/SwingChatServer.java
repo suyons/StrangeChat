@@ -1,16 +1,17 @@
-package server;
+package donotuse;
 
 import java.net.InetAddress;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import common.*;
 
-public class ChatServer {
+public class SwingChatServer {
     // 멀티스레드: 클라이언트 스레드를 ArrayList로 관리
-    private static ArrayList<ServerThread> threadList = new ArrayList<>();
+    private static ArrayList<SwingServerThread> threadList = new ArrayList<>();
 
-    static ArrayList<ServerThread> getThreadList() {
+    static ArrayList<SwingServerThread> getThreadList() {
         return threadList;
     }
 
@@ -61,10 +62,10 @@ public class ChatServer {
 
     // 클라이언트 접속 시 userMap에서 해당 사용자명을 찾아오며 환영인사를 반환
     // [서버] 글머리: 모든 클라이언트와 서버에서 표시됩니다.
-    static Chat greeting(InetAddress ipAddr) {
+    static Chat greeting(Socket clientSocket) {
         Chat chat = new Chat();
         chat.content = Constants.SERVER_NAME + Chat.hourMinute(chat.timestamp)
-                + getUserName(ipAddr) + "님께서 입장하셨습니다.";
+                + getUserName(clientSocket.getInetAddress()) + "님 반갑습니다!";
         addChat(chat);
         return chat;
     }
@@ -74,14 +75,6 @@ public class ChatServer {
     static Chat clientsChat(InetAddress ipAddr, String content) {
         Chat chat = new Chat();
         chat.content = "[" + getUserName(ipAddr) + "] " + Chat.hourMinute(chat.timestamp) + content;
-        addChat(chat);
-        return chat;
-    }
-
-    static Chat clientLeft(InetAddress ipAddr) {
-        Chat chat = new Chat();
-        chat.content = Constants.SYSTEM_NAME + Chat.hourMinute(chat.timestamp)
-                + getUserName(ipAddr) + "님께서 퇴장하셨습니다.";
         addChat(chat);
         return chat;
     }

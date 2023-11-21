@@ -9,6 +9,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.SocketException;
 import java.nio.charset.StandardCharsets;
+import java.util.ConcurrentModificationException;
 
 import common.*;
 
@@ -42,13 +43,18 @@ public class ServerThread extends Thread {
                             clientSocket.getInputStream(), StandardCharsets.UTF_8));
             writer = new PrintWriter(
                     new BufferedWriter(
-                        new OutputStreamWriter(
-                            clientSocket.getOutputStream(), StandardCharsets.UTF_8)), true);
+                            new OutputStreamWriter(
+                                    clientSocket.getOutputStream(), StandardCharsets.UTF_8)),
+                    true);
 
             // Server continuously listens for messages from the client
             while (true) {
                 // 클라이언트 접속 시 "OOOO님 반갑습니다!" 출력
-                broadcastMsg(ChatServer.greeting(clientSocket));
+                try {
+                    broadcastMsg(ChatServer.greeting(clientSocket.getInetAddress()));
+                } catch (ConcurrentModificationException e) {
+                    System.out.println("");
+                }
 
                 // 클라이언트로부터 받은 메시지가 null 아니라면 이를 서버에서 처리하고
                 // 모든 클라이언트에게 broadcast
@@ -60,7 +66,14 @@ public class ServerThread extends Thread {
                 }
             }
         } catch (SocketException e) {
-            System.out.println(Constants.SYSTEM_NAME + "클라이언트가 채팅을 종료하였습니다.");
+            /*
+             * 클라이언트 소켓이 close() 메서드를 통해 정상적으로 종료된 상황이 아닌데
+             * 데이터 전송이 안 될 때 SocketException이 발생한다.
+             * SocketException 예외 처리 후 해당 스레드는 종료되며, ServerSocket이
+             * 완전히 종료되는 것이 아니라 1개 클라이언트에 대한 스레드만 종료되는
+             * 것이므로 다른 클라이언트와의 연결은 그대로 유지된다.
+             */
+            broadcastMsg(ChatServer.clientLeft(clientSocket.getInetAddress()));
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -74,12 +87,7 @@ public class ServerThread extends Thread {
 
     private void broadcastMsg(Chat chat) {
         for (ServerThread thread : ChatServer.getThreadList()) {
-            try {
-                thread.writer.println(chat.toString());
-            } catch (Exception e) {
-                System.out.println("broadcastMsg() 메서드 예외 발생");
-                e.printStackTrace();
-            }
+            thread.writer.println(chat.toString());
         }
     }
 }

@@ -19,8 +19,6 @@ import javax.swing.JTextField;
 
 import common.Constants;
 import common.User;
-import swingserver.SwingChatServer;
-import swingserver.SwingServerThread;
 
 public class SwingServerApp extends JFrame implements ActionListener {
 
