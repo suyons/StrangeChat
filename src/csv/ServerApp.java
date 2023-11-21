@@ -50,8 +50,13 @@ public class ServerApp {
 				PrintWriter writer = new PrintWriter(new BufferedWriter(
 						new OutputStreamWriter(clientSocket.getOutputStream(), StandardCharsets.UTF_8)), true);
 
+				// 이전 대화목록 다시 보여주기 - chatMap에 있던 대화내용 보여주기
+				CSVReader csvReader = new CSVReader();
+				writer.println(csvReader.readCSV());
+				
 				// 클라이언트 접속 시 "OOOO님 반갑습니다!" 출력
 				writer.println(ChatServer.greeting(clientSocket));
+				
 
 				// 클라이언트 → 서버 전송: 서버에서 클라이언트 소켓의 입력 스트림 사용
 				BufferedReader reader = new BufferedReader(

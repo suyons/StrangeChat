@@ -1,5 +1,6 @@
 package csv;
 
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.InetAddress;
@@ -42,7 +43,7 @@ public class ChatServer {
 	static void addUserCsv(InetAddress ipAddr) {
 
 		try (FileWriter fw = new FileWriter("User.csv", true)) {
-//				fw.write("IP주소, 닉네임");
+//				fw.write("IP주소, 닉네임");  이거 이어쓰기모드(true)에서는 적용하면 계속 추가됨
 			Iterator<InetAddress> ir = userMap.keySet().iterator();
 			while (ir.hasNext()) {
 				ipAddr = ir.next();
@@ -66,7 +67,7 @@ public class ChatServer {
 	public static void addChatCsv(InetAddress ipAddr) {
 
 		try (FileWriter fw = new FileWriter("Chat.csv", true)) {
-//					fw.write("시간, 닉네임, 대화내용");
+//					fw.write("시간, 닉네임, 대화내용"); 이거 이어쓰기모드(true)에서는 적용하면 계속 추가됨
 			// 대화 출력을 위한 반복자
 			Iterator<Long> chatIr = chatMap.keySet().iterator();
 			while (chatIr.hasNext()) {
@@ -83,7 +84,7 @@ public class ChatServer {
 					fw.write("\n");
 					fw.write(time);
 					fw.write(", ");
-					fw.write(userName); // 여기서 IOException user부분 삭제하면 저장 잘됨
+					fw.write(userName); 
 					fw.write(", ");
 					fw.write(chat);
 				}
@@ -91,8 +92,20 @@ public class ChatServer {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
 	}
+	
+	//chatMap에 있는 이전 대화 목록 꺼내오기
+//	public void beforeChat() {
+//		try(FileReader fr = new FileReader("Chat.csv")){
+//			int i;
+//			fr.r
+//			while() {
+//				System.out.println((char)i);
+//			}
+//		} catch(IOException e) {
+//			e.printStackTrace();
+//		}
+//	}
 
 	// ServerSocket 생성 이후 클라이언트 대기 메시지 출력
 	// [시스템] 글머리: 서버에서만 보입니다. 클라이언트로 전송하지 않습니다.
@@ -101,7 +114,7 @@ public class ChatServer {
 		Chat chat = new Chat();
 		chat.content = Constants.SYSTEM_NAME + Chat.hourMinute(chat.timestamp) + Constants.SERVER_PORT
 				+ "번 포트 연결 대기 중입니다.";
-//        addChat(chat);
+//        addChat(chat);  이거 추가하면 대화내용 csv 파일에 나옴
 		return chat;
 	}
 
@@ -111,7 +124,7 @@ public class ChatServer {
 		Chat chat = new Chat();
 		chat.content = Constants.SYSTEM_NAME + Chat.hourMinute(chat.timestamp) + "새 클라이언트 연결: " + ipAddr + " <"
 				+ getUserName(ipAddr) + ">";
-//        addChat(chat);
+//        addChat(chat);  이거 추가하면 대화내용 csv 파일에 나옴
 		return chat;
 	}
 
@@ -121,28 +134,22 @@ public class ChatServer {
 		Chat chat = new Chat();
 		chat.content = Constants.SERVER_NAME + Chat.hourMinute(chat.timestamp)
 				+ getUserName(clientSocket.getInetAddress()) + "님 반갑습니다!";
-//        addChat(chat);
+//        addChat(chat);	이거 추가하면 대화내용 csv 파일에 나옴
 		return chat;
 	}
 
 	// 클라이언트가 전송한 채팅을 chatMap에 저장하고, [발신자] (시간) 내용 형식으로 반환
 	// [사용자명] 글머리: 모든 클라이언트와 서버에서 표시됩니다.
-//    static Chat clientsChat(InetAddress ipAddr, String content) {
-//        Chat chat = new Chat();
-//        chat.content = "[" + getUserName(ipAddr) + "] " + Chat.hourMinute(chat.timestamp) + content;
-//        //chatmap 저장
-////        chat.onlyContent = content; 
-//        addChat(chat);
-//        return chat;
-//    }
-
 	static String clientsChat(InetAddress ipAddr, String content) {
 		Chat chat = new Chat();
-		chat.content = content;
+		chat.content = content; //대화 내용만 출력하고 싶어서 [발신자] (시간) 내용 형식 말고 그냥 content 대입 
 		addChat(chat); // chatMap에 저장하는 메서드
 		return "[" + getUserName(ipAddr) + "] " + Chat.hourMinute(chat.timestamp) + content;
 	}
 
+	
+	
+	
 	// (미구현) 기능 추가 예시: 사용자명 변경
 	static void changeUserName(String name) {
 		// HashMap의 Value 수정
