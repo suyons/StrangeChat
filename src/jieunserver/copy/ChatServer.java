@@ -48,7 +48,7 @@ public class ChatServer {
 			ipAddr = ir.next();
 			String userName = userMap.get(ipAddr);
 
-			try (FileWriter fw = new FileWriter("User.csv", true)) { //true 파일을 초기화하지 않고 그대로 이어쓰는 방식
+			try (FileWriter fw = new FileWriter("User.csv")) { //true 파일을 초기화하지 않고 그대로 이어쓰는 방식
 				String IpAdress = ipAddr.getHostAddress();
 				
 				fw.write("\n");
@@ -65,20 +65,22 @@ public class ChatServer {
 	}
 	
 	// Chat.csv 파일에 시간, 대화내용, 닉네임 입력
-		public static void addChatCsv(InetAddress ipAddr) {
+		public static void addChatCsv(InetAddress ipAddr) throws IOException {
 			Iterator<Long> ir = chatMap.keySet().iterator();
+			
+			
 			while (ir.hasNext()) {
 				Long timestamp = ir.next();
-				String chat = chatMap.get(timestamp);
-				String userName = userMap.get(ipAddr);
 				String time = Chat.hourMinute(timestamp);
+				String userName = userMap.get(ipAddr);
+				String chat = chatMap.get(timestamp);
 				
-				try (FileWriter fw = new FileWriter("Chat.csv",true)) {
-					
+				try (FileWriter fw = new FileWriter("Chat.csv")) {
+					fw.write("시간, 닉네임, 유저대화");
 					fw.write("\n");
 					fw.write(time);
-					fw.write(", ");
-					fw.write(userName); //여기서 IOException
+//					fw.write(", ");
+//					fw.write(userName); 	 //여기서 IOException
 					fw.write(", ");
 					fw.write(chat);
 
@@ -127,6 +129,7 @@ public class ChatServer {
     static Chat clientsChat(InetAddress ipAddr, String content) {
         Chat chat = new Chat();
         chat.content = "[" + getUserName(ipAddr) + "] " + Chat.hourMinute(chat.timestamp) + content;
+        chat.onlyContent = content;
         addChat(chat);
         return chat;
     }
@@ -137,12 +140,4 @@ public class ChatServer {
         // CSV 파일에 저장된 내용 수정
     }
     
-//    public static void main(String[] args) {
-//    	//파일에 내용 입력
-//		try(FileWriter fw = new FileWriter("User.csv")){
-//			
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//    }
 }
