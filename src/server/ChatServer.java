@@ -61,7 +61,7 @@ public class ChatServer {
 
     // 클라이언트 접속 시 userMap에서 해당 사용자명을 찾아오며 환영인사를 반환
     // [서버] 글머리: 모든 클라이언트와 서버에서 표시됩니다.
-    static Chat greeting(InetAddress ipAddr) {
+    static Chat clientJoined(InetAddress ipAddr) {
         Chat chat = new Chat();
         chat.content = Constants.SERVER_NAME + Chat.hourMinute(chat.timestamp)
                 + getUserName(ipAddr) + "님께서 입장하셨습니다.";

@@ -49,9 +49,9 @@ public class ServerThread extends Thread {
 
             // Server continuously listens for messages from the client
             while (true) {
-                // 클라이언트 접속 시 "OOOO님 반갑습니다!" 출력
+                // 클라이언트 접속 시 "OOOO님께서 입장하셨습니다." 출력
                 try {
-                    broadcastMsg(ChatServer.greeting(clientSocket.getInetAddress()));
+                    broadcastMsg(ChatServer.clientJoined(clientSocket.getInetAddress()));
                 } catch (ConcurrentModificationException e) {
                     System.out.println("");
                 }
