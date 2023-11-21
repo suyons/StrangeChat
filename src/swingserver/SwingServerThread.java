@@ -48,13 +48,13 @@ public class SwingServerThread extends Thread {
             // Server continuously listens for messages from the client
             while (true) {
                 // 클라이언트 접속 시 "OOOO님 반갑습니다!" 출력
-                broadcastMsg(ChatServer.greeting(clientSocket));
+                broadcastMsg(SwingChatServer.greeting(clientSocket));
 
                 // 클라이언트로부터 받은 메시지가 null 아니라면 이를 서버에서 처리하고
                 // 모든 클라이언트에게 broadcast
                 String content;
                 while ((content = reader.readLine()) != null) {
-                    Chat chat = ChatServer.clientsChat(clientSocket.getInetAddress(), content);
+                    Chat chat = SwingChatServer.clientsChat(clientSocket.getInetAddress(), content);
                     System.out.println(chat);
                     broadcastMsg(chat);
                 }
@@ -73,7 +73,7 @@ public class SwingServerThread extends Thread {
     }
 
     private void broadcastMsg(Chat chat) {
-        for (SwingServerThread thread : ChatServer.getThreadList()) {
+        for (SwingServerThread thread : SwingChatServer.getThreadList()) {
             try {
                 thread.writer.println(chat.toString());
             } catch (Exception e) {
