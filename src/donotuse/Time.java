@@ -1,4 +1,4 @@
-package common;
+package donotuse;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;

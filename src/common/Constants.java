@@ -7,4 +7,5 @@ public class Constants {
     public static final int SERVER_PORT = 12345;
     public static final String SERVER_NAME = "[서버] ";
     public static final String SYSTEM_NAME = "[시스템] ";
+    public static final String ADMIN_NAME = "[관리자] ";
 }

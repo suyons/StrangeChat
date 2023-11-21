@@ -1,7 +1,7 @@
 // 추후 추가기능 구현에 이용될 예정
 // StringBuilder를 이용한 문자열 생성 예제 코드
 
-package example;
+package donotuse;
 
 import java.util.Random;
 

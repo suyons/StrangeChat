@@ -1,6 +1,6 @@
 // CRUD (Create, Read, Update, Delete 예제)
 
-package example;
+package donotuse;
 
 import java.util.HashMap;
 import java.util.Map;

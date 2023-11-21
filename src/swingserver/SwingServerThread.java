@@ -14,8 +14,8 @@ import common.*;
 
 public class SwingServerThread extends Thread {
     private Socket clientSocket;
-    private BufferedReader reader;
-    private PrintWriter writer;
+    BufferedReader reader;
+    PrintWriter writer;
 
     public SwingServerThread(Socket clientSocket) {
         this.clientSocket = clientSocket;
