@@ -98,12 +98,11 @@ public class SwingClientApp extends JFrame implements ActionListener {
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// action event가 발생한 source가 button1 또는 textfield 인가요?
+		// ActionListener를 통해 ActionEvent가 발생한 source가 button1 또는 textfield 인가요?
 		Object obj = e.getSource();
 		if (obj == button1 || obj == textField) {
 			sendMessage();
 		}
-		// else if (obj == button2) { }
 	}
 
 	private void sendMessage() {
