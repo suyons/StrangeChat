@@ -1,4 +1,4 @@
-package multichat;
+package swingchat;
 
 import java.net.InetAddress;
 import java.net.Socket;

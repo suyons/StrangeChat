@@ -1,4 +1,4 @@
-package multichat;
+package swingchat;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -23,10 +23,12 @@ public class SwingClient extends JFrame implements ActionListener {
 	private JPanel panelCenter;
 	private JPanel panelSouth;
 
+	// TextField: 단일 행 입출력 가능 → 신규 대화 입력 영역
 	private JTextField textField;
 	private JButton button1;
 	private JButton button2;
 
+	// TextArea: 여러 행 입출력 가능 → 대화 내용 보기 영역
 	private JTextArea textArea;
 
 	private Socket socket = null;
@@ -80,11 +82,13 @@ public class SwingClient extends JFrame implements ActionListener {
 		panelSouth.add(button1);
 
 		add(panelSouth, BorderLayout.SOUTH);
-
 	}
 
+	// ActionListener 인터페이스의 actionPerformed 메서드 재정의
 	@Override
+	// When the action event occurs, that object's actionPerformed method is invoked.
 	public void actionPerformed(ActionEvent e) {
+		// action event가 발생한 source가 button1 또는 textfield 인가요?
 		Object obj = e.getSource();
 		if (obj == button1 || obj == textField) {
 			localType();
@@ -94,7 +98,8 @@ public class SwingClient extends JFrame implements ActionListener {
 
 	private void localType() {
 		try {
-			String outMessage = textField.getText(); // textfield에 있는 메세지를 외부(클)로 보낸다
+			// textfield에 있는 메세지를 보낼 거에요
+			String outMessage = textField.getText();
 			writer.write(outMessage + "\n"); // try캐치문 실행
 			writer.flush();
 
@@ -107,11 +112,11 @@ public class SwingClient extends JFrame implements ActionListener {
 
 	}
 
-	public JButton getBtn() {
+	public JButton getButton1() {
 		return button1;
 	}
 
-	public JTextArea getTa() {
+	public JTextArea getTextArea() {
 		return textArea;
 	}
 

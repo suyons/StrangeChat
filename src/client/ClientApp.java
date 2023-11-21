@@ -11,7 +11,6 @@ import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 
 import common.Constants;
-import jieunserver.copy.ChatServer;
 
 public class ClientApp {
     public static void main(String[] args) {

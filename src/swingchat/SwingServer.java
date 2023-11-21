@@ -1,4 +1,4 @@
-package multichat;
+package swingchat;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -25,7 +25,7 @@ import javax.swing.JTextField;
 import common.Constants;
 import common.User;
 
-public class GUI_Server extends JFrame implements ActionListener {
+public class SwingServer extends JFrame implements ActionListener {
 
 	private JPanel panelCenter;
 	private JPanel panelSouth;
@@ -46,7 +46,7 @@ public class GUI_Server extends JFrame implements ActionListener {
 	
 	private ArrayList<ServerThread> threadList = new ArrayList<>();
 	
-	public GUI_Server(String title, int width, int height) {
+	public SwingServer(String title, int width, int height) {
 		
 		setTitle(title);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -66,7 +66,6 @@ public class GUI_Server extends JFrame implements ActionListener {
 		try (ServerSocket serverSocket = new ServerSocket(Constants.SERVER_PORT)) {
             System.out.println(ChatServer.waiting());
 			
-			//여러개가 엑셉트 되어야함
 			while(true) {
 				// serverSocket.accept(): 연결된 Socket 객체를 반환
 				Socket clientSocket = serverSocket.accept();
@@ -76,7 +75,7 @@ public class GUI_Server extends JFrame implements ActionListener {
                     ChatServer.addUser(new User(clientSocket.getInetAddress()));
 
 				textArea.append("연결 되었습니다!!!\n");	//연결될때마다 리스트를 만들고 add로 스레드리스트 추가
-				ServerThread st = new ServerThread(socket, threadList);
+				ServerThread st = new ServerThread(clientSocket, threadList);
 				//서버 스레드 생성 후 클래스로 생성
 				//소켓을 리셋시킬거임
 				//스레드리스트를 만들거임
@@ -87,16 +86,9 @@ public class GUI_Server extends JFrame implements ActionListener {
 			
 		} catch (IOException e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				server.close();
-				
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
 		}
-		
 	}
+	
 	private void setCenter() {
 		panelCenter = new JPanel();
 		panelCenter.setBackground(Color.BLUE);
@@ -169,7 +161,7 @@ public class GUI_Server extends JFrame implements ActionListener {
 	}
 	
 	public static void main(String[] args) {
-		GUI_Server cs = new GUI_Server("채팅서버", 300, 400);
+		SwingServer cs = new SwingServer("채팅서버", 300, 400);
 		cs.setSocketServer();
 		
 	}
