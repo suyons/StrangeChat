@@ -6,6 +6,7 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 
 import common.Chat;
 import common.Constants;
@@ -16,7 +17,7 @@ import common.User;
 public class ChatServer {
     // userMap: K=IP주소, V=닉네임 + ChatMap: K=타임스탬프, V=대화내용
     private static HashMap<InetAddress, String> userMap = new HashMap<InetAddress, String>();
-    private static HashMap<Long, String> chatMap = new HashMap<Long, String>();
+    private static HashMap<Long, String> chatMap = new LinkedHashMap<Long, String>();
 
     
     // userMap에서 K=IP주소 넣고 V=닉네임 꺼내기
@@ -35,7 +36,6 @@ public class ChatServer {
         
     }
     
-
     // chatMap에서 <K, V> 1쌍 추가
     static void addChat(Chat chat) {
         chatMap.put(chat.timestamp, chat.content);
@@ -43,64 +43,74 @@ public class ChatServer {
     
 	// User.csv 파일에 IP주소, 닉네임 기록
 	static void addUserCsv(InetAddress ipAddr) {
-		Iterator<InetAddress> ir = userMap.keySet().iterator();
-		while (ir.hasNext()) {
-			ipAddr = ir.next();
-			String userName = userMap.get(ipAddr);
+		
 
 			try (FileWriter fw = new FileWriter("User.csv")) { //true 파일을 초기화하지 않고 그대로 이어쓰는 방식
-				String IpAdress = ipAddr.getHostAddress();
+				
+				fw.write("IP주소, 닉네임");
+				
+				Iterator<InetAddress> ir = userMap.keySet().iterator();
+				while (ir.hasNext()) {
+					ipAddr = ir.next();
+					String userName = userMap.get(ipAddr);
+					
+				String IpAdress = ipAddr.getHostAddress(); 
 				
 				fw.write("\n");
 				fw.write(IpAdress);
 				fw.write(", ");
 				fw.write(userName);
 				
-
+				
+				}
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 
 		}
-	}
+	
 	
 	// Chat.csv 파일에 시간, 대화내용, 닉네임 입력
 		public static void addChatCsv(InetAddress ipAddr) throws IOException {
-			Iterator<Long> ir = chatMap.keySet().iterator();
-			
-			
-			while (ir.hasNext()) {
-				Long timestamp = ir.next();
-				String time = Chat.hourMinute(timestamp);
-//				String userName = userMap.get(ipAddr);
-				String chat = chatMap.get(timestamp);
 				
 				try (FileWriter fw = new FileWriter("Chat.csv")) {
-					fw.write("시간, 닉네임, 유저대화");
-					fw.write("\n");
-					fw.write(time);
-//					fw.write(", ");
-//					fw.write(userName); 	 //여기서 IOException
-					fw.write(", ");
-					fw.write(chat);
-
-				} catch (IOException e) {
+					
+					fw.write("시간, 닉네임, 대화내용");
+					
+					//대화 출력을 위한 반복자
+					Iterator<Long> chatIr = chatMap.keySet().iterator();
+					while (chatIr.hasNext()) {
+						Long timestamp = chatIr.next();
+						String time = Chat.dateTime(timestamp);
+						String chat = chatMap.get(timestamp);
+						
+						//유저 이름 출력을 위한 반복자
+						Iterator<InetAddress> userIr = userMap.keySet().iterator();
+						while (userIr.hasNext()) {
+							ipAddr = userIr.next();
+							String userName = userMap.get(ipAddr);
+							
+						fw.write("\n");
+						fw.write(time);
+						fw.write(", ");
+						fw.write(userName); 	 //여기서 IOException user부분 삭제하면 저장 잘됨
+						fw.write(", ");
+						fw.write(chat);
+					}
+				}} catch (IOException e) {
 					e.printStackTrace();
 				}
 
 			}
-		}
-    
-    
 
     // ServerSocket 생성 이후 클라이언트 대기 메시지 출력
     // [시스템] 글머리: 서버에서만 보입니다. 클라이언트로 전송하지 않습니다.
     // Chat 클래스에서 String content를 반환하도록 toString() 재정의됨
-    static Chat waiting() {
+    static Chat waiting() { //원래 Chat타입
         Chat chat = new Chat();
         chat.content = Constants.SYSTEM_NAME + Chat.hourMinute(chat.timestamp)
                 + Constants.SERVER_PORT + "번 포트 연결 대기 중입니다.";
-        addChat(chat);
+//        addChat(chat);
         return chat;
     }
 
@@ -110,7 +120,7 @@ public class ChatServer {
         Chat chat = new Chat();
         chat.content = Constants.SYSTEM_NAME + Chat.hourMinute(chat.timestamp)
                 + "새 클라이언트 연결: " + ipAddr + " <" + getUserName(ipAddr) + ">";
-        addChat(chat);
+//        addChat(chat);
         return chat;
     }
 
@@ -120,19 +130,28 @@ public class ChatServer {
         Chat chat = new Chat();
         chat.content = Constants.SERVER_NAME + Chat.hourMinute(chat.timestamp)
                 + getUserName(clientSocket.getInetAddress()) + "님 반갑습니다!";
-        addChat(chat);
+//        addChat(chat);
         return chat;
     }
-
+    
     // 클라이언트가 전송한 채팅을 chatMap에 저장하고, [발신자] (시간) 내용 형식으로 반환
     // [사용자명] 글머리: 모든 클라이언트와 서버에서 표시됩니다.
-    static Chat clientsChat(InetAddress ipAddr, String content) {
+//    static Chat clientsChat(InetAddress ipAddr, String content) {
+//        Chat chat = new Chat();
+//        chat.content = "[" + getUserName(ipAddr) + "] " + Chat.hourMinute(chat.timestamp) + content;
+//        //chatmap 저장
+////        chat.onlyContent = content; 
+//        addChat(chat);
+//        return chat;
+//    }
+    
+    static String clientsChat(InetAddress ipAddr, String content) {
         Chat chat = new Chat();
-        chat.content = "[" + getUserName(ipAddr) + "] " + Chat.hourMinute(chat.timestamp) + content;
-        chat.onlyContent = content;
-        addChat(chat);
-        return chat;
+        chat.content = content;
+        addChat(chat); //chatMap에 저장하는 메서드
+        return "[" + getUserName(ipAddr) + "] " + Chat.hourMinute(chat.timestamp) + content;
     }
+
 
     // (미구현) 기능 추가 예시: 사용자명 변경
     static void changeUserName(String name) {

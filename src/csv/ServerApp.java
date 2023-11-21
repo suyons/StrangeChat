@@ -63,9 +63,10 @@ public class ServerApp {
                 // 클라이언트로부터 받은 메시지를 서버에서 출력하고, 클라이언트에게도 송출
                 String content;
                 while ((content = reader.readLine()) != null) {
-                    Chat chat = ChatServer.clientsChat(clientSocket.getInetAddress(), content);
-                    System.out.println(chat);
-                    writer.println(chat);
+                	//clientsChat - [발신자] (시간) 내용 형식
+                    String chat = ChatServer.clientsChat(clientSocket.getInetAddress(), content);
+                    System.out.println(chat); // [발신자] (시간) 내용 형식 출력
+                    writer.println(chat);	//서버 -> 클라이언트에게 chat 전송
                     //Chat.csv 파일에 시간, 유저닉네임, 대화내용 넣기
                 	ChatServer.addChatCsv(serverSocket.getInetAddress());
                 }
