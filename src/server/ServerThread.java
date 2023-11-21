@@ -7,9 +7,9 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
-// import java.net.SocketException;
+import java.net.SocketException;
 import java.nio.charset.StandardCharsets;
-// import java.util.ConcurrentModificationException;
+import java.util.ConcurrentModificationException;
 
 import common.*;
 
@@ -17,9 +17,11 @@ public class ServerThread extends Thread {
     private Socket clientSocket;
     private BufferedReader reader;
     private PrintWriter writer;
-
+    final String CLIENT_IP;
+    
     public ServerThread(Socket clientSocket) {
         this.clientSocket = clientSocket;
+        CLIENT_IP = clientSocket.getInetAddress().getHostAddress();
     }
 
     @Override
@@ -50,24 +52,22 @@ public class ServerThread extends Thread {
             // Server continuously listens for messages from the client
             while (true) {
                 // 클라이언트 접속 시 "OOOO님께서 입장하셨습니다." 출력
-                // try {
-                    broadcastMsg(ChatServer.clientJoined(clientSocket.getInetAddress().getHostAddress()));
-                // } catch (ConcurrentModificationException e) {
-                //     System.out.println("");
-                // }
+                try {
+                    broadcastMsg(ChatServer.clientJoined(CLIENT_IP));
+                } catch (ConcurrentModificationException e) {
+                    System.out.println("");
+                }
 
                 // 클라이언트로부터 받은 메시지가 null 아니라면 이를 서버에서 처리하고
                 // 모든 클라이언트에게 broadcast
                 String content;
                 while ((content = reader.readLine()) != null) {
-                    Chat chat = ChatServer.clientsChat(clientSocket.getInetAddress().getHostAddress(), content);
+                    Chat chat = ChatServer.clientsChat(CLIENT_IP, content);
                     System.out.println(chat);
                     broadcastMsg(chat);
                 }
             }
-        } 
-        
-        // catch (SocketException e) {
+        } catch (SocketException e) {
             /*
              * 클라이언트 소켓이 close() 메서드를 통해 정상적으로 종료된 상황이 아닌데
              * 데이터 전송이 안 될 때 SocketException이 발생한다.
@@ -75,9 +75,9 @@ public class ServerThread extends Thread {
              * 완전히 종료되는 것이 아니라 1개 클라이언트에 대한 스레드만 종료되는
              * 것이므로 다른 클라이언트와의 연결은 그대로 유지된다.
              */
-        //    broadcastMsg(ChatServer.clientLeft(clientSocket.getInetAddress().getHostAddress()));
-        // } 
-        catch (IOException e) {
+            ChatServer.getThreadList().remove(this);
+            broadcastMsg(ChatServer.clientLeft(CLIENT_IP));
+        } catch (IOException e) {
             e.printStackTrace();
         } finally {
             try {
@@ -89,8 +89,9 @@ public class ServerThread extends Thread {
     }
 
     private void broadcastMsg(Chat chat) {
-        for (ServerThread thread : ChatServer.getThreadList()) {
-            thread.writer.println(chat.toString());
+        if(chat != null)
+            for (ServerThread thread : ChatServer.getThreadList()) {
+                thread.writer.println(chat.toString());
         }
     }
 }
