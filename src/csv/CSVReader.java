@@ -45,26 +45,26 @@ public class CSVReader {
 
 }
 */
-
-	static void testLine() {
-		String line;
-		try (BufferedReader fr = new BufferedReader(new FileReader("Chat.csv"))) {
-
-			while ((line = fr.readLine()) != null) {
-				String[] data = line.split(",");
-				if (data[0].equals("시간"))
-					continue;
-				System.out.println(data[0] + "," + data[1] + "," + data[2]);
-			}
-		} catch (IOException e) {
-			System.out.println(e);
-		}
-	}
-
-	public static void main(String[] args) {
-		testLine();
-	}
-}
+//
+//	static void testLine() {
+//		String line;
+//		try (BufferedReader fr = new BufferedReader(new FileReader("Chat.csv"))) {
+//
+//			while ((line = fr.readLine()) != null) {
+//				String[] data = line.split(",");
+//				if (data[0].equals("시간"))
+//					continue;
+//				System.out.println(data[0] + "," + data[1] + "," + data[2]);
+//			}
+//		} catch (IOException e) {
+//			System.out.println(e);
+//		}
+//	}
+//
+//	public static void main(String[] args) {
+//		testLine();
+//	}
+//}
 
 //	// 클라이언트가 전송한 채팅을 chatMap에 저장하고, [발신자] (시간) 내용 형식으로 반환
 //	// [사용자명] 글머리: 모든 클라이언트와 서버에서 표시됩니다.
