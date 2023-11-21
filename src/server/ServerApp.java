@@ -34,8 +34,16 @@ public class ServerApp {
                 thread.start();
             }
         } catch (SocketException e) {
+            /*
+             * 클라이언트 소켓이 close() 메서드를 통해 정상적으로 종료된 상황이 아닌데
+             * 데이터 전송이 안 될 때 SocketException이 발생한다.
+             * SocketException 예외 처리 후 해당 스레드는 종료되며, ServerSocket이
+             * 완전히 종료되는 것이 아니라 1개 클라이언트에 대한 스레드만 종료되는
+             * 것이므로 다른 클라이언트와의 연결은 그대로 유지된다.
+             */
             System.out.println(Constants.SYSTEM_NAME + "클라이언트가 연결을 종료했습니다.");
         } catch (IOException e) {
+            // ConnectException 외 IOException에 대해 예외가 발생한 부분의 내용을 표시
             e.printStackTrace();
         }
     }

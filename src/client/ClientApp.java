@@ -33,16 +33,21 @@ public class ClientApp {
                 // readLine(): 스트림에 들어온 것이 없다면 null을 반환한다.
                 System.out.println(reader.readLine());
                 System.out.print("＞ ");
+
+                // 입력 없이 Enter 클릭한다면 끝까지 > 를 표시하여 입력을 받아낸다.
                 String content;
                 while ((content = userInput.readLine()).trim().isEmpty()) {
                     System.out.print("＞ ");
                 }
+                // 입력된 문자열을 서버로 전송한다.
                 writer.println(content);
             }
 
         } catch (ConnectException e) {
+            // 서버에 정상적으로 연결되지 않았을 때 ConnectException 예외 발생
             System.out.println(Constants.SYSTEM_NAME + "서버를 찾지 못했습니다.");
         } catch (IOException e) {
+            // ConnectException 외 IOException에 대해 예외가 발생한 부분의 내용을 표시
             e.printStackTrace();
         }
     }
