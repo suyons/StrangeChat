@@ -7,7 +7,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 // Thread implements Runnable.
 // 따라서 "extends Thread"는 "implements Runnable"을 포함한다.
