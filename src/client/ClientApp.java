@@ -5,6 +5,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.net.ConnectException;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
@@ -24,15 +25,15 @@ public class ClientApp {
                 BufferedReader reader = new BufferedReader(
                         new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
                 // 클라이언트 Socket의 출력 스트림: 클라이언트 → 서버 전송 시 사용
-                BufferedWriter writer = new BufferedWriter(
-                        new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8))) {
+                PrintWriter writer = new PrintWriter(new BufferedWriter(
+                        new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8)), true)) {
             while (true) {
                 BufferedReader userInput = new BufferedReader(
                         new InputStreamReader(System.in, StandardCharsets.UTF_8));
                 // readLine(): 스트림에 들어온 것이 없다면 null을 반환한다.
                 System.out.println(reader.readLine());
                 System.out.print("＞ ");
-                writer.write(userInput.readLine());
+                writer.println(userInput.readLine());
             }
 
         } catch (ConnectException e) {

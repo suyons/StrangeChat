@@ -9,9 +9,9 @@ import common.*;
 
 public class ChatServer {
     // 멀티스레드: 클라이언트 스레드를 ArrayList로 관리
-    private static ArrayList<ClientThread> threadList = new ArrayList<>();
+    private static ArrayList<ServerThread> threadList = new ArrayList<>();
 
-    static ArrayList<ClientThread> getThreadList() {
+    static ArrayList<ServerThread> getThreadList() {
         return threadList;
     }
 

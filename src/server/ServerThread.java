@@ -5,17 +5,18 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 
 import common.Chat;
 
-public class ClientThread extends Thread {
+public class ServerThread extends Thread {
     private Socket clientSocket;
     private BufferedReader reader;
-    private BufferedWriter writer;
+    private PrintWriter writer;
 
-    public ClientThread(Socket clientSocket) {
+    public ServerThread(Socket clientSocket) {
         this.clientSocket = clientSocket;
     }
 
@@ -38,16 +39,18 @@ public class ClientThread extends Thread {
             reader = new BufferedReader(
                     new InputStreamReader(
                             clientSocket.getInputStream(), StandardCharsets.UTF_8));
-            writer = new BufferedWriter(
-                    new OutputStreamWriter(
-                            clientSocket.getOutputStream(), StandardCharsets.UTF_8));
+            writer = new PrintWriter(
+                    new BufferedWriter(
+                        new OutputStreamWriter(
+                            clientSocket.getOutputStream(), StandardCharsets.UTF_8)), true);
 
             // Server continuously listens for messages from the client
             while (true) {
                 // 클라이언트 접속 시 "OOOO님 반갑습니다!" 출력
                 broadcastMsg(ChatServer.greeting(clientSocket));
 
-                // 클라이언트로부터 받은 메시지를 서버에서 출력하고, 클라이언트에게도 송출
+                // 클라이언트로부터 받은 메시지가 null 아니라면 이를 서버에서 처리하고
+                // 모든 클라이언트에게 broadcast
                 String content;
                 while ((content = reader.readLine()) != null) {
                     Chat chat = ChatServer.clientsChat(clientSocket.getInetAddress(), content);
@@ -67,11 +70,10 @@ public class ClientThread extends Thread {
     }
 
     private void broadcastMsg(Chat chat) {
-        for (ClientThread thread : ChatServer.getThreadList()) {
+        for (ServerThread thread : ChatServer.getThreadList()) {
             try {
-                thread.writer.write(chat.toString());
-                thread.writer.flush();
-            } catch (IOException e) {
+                thread.writer.println(chat.toString());
+            } catch (Exception e) {
                 System.out.println("broadcastMsg() 메서드 예외 발생");
                 e.printStackTrace();
             }
