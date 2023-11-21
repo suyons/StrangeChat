@@ -1,4 +1,4 @@
-package swingchat;
+package common;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;

@@ -1,4 +1,4 @@
-package swingchat;
+package example;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -10,13 +10,13 @@ import java.util.ArrayList;
 
 // Thread implements Runnable.
 // 따라서 "extends Thread"는 "implements Runnable"을 포함한다.
-public class ServerThread extends Thread {
+public class ServerThreadSwing extends Thread {
 	private Socket socket;
-	private ArrayList<ServerThread> threadList;
+	private ArrayList<ServerThreadSwing> threadList;
 	private BufferedReader in = null;
 	private BufferedWriter out = null;
 	
-	public ServerThread(Socket socket, ArrayList<ServerThread> threadList) {
+	public ServerThreadSwing(Socket socket, ArrayList<ServerThreadSwing> threadList) {
 		this.socket = socket;
 		this.threadList = threadList;
 	}
@@ -44,7 +44,7 @@ public class ServerThread extends Thread {
 	}
 	// 서버스레드가 내가 보낼놈
 	private void sendToAllClient(String outMsg) {
-		for (ServerThread st : threadList) {	//나한테 연결된 모든 애한테 다뿌린다는 의미
+		for (ServerThreadSwing st : threadList) {	//나한테 연결된 모든 애한테 다뿌린다는 의미
 			try {
 				st.out.write(outMsg + "\n");
 				st.out.flush();

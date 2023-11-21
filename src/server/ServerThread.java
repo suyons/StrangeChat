@@ -7,9 +7,10 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.SocketException;
 import java.nio.charset.StandardCharsets;
 
-import common.Chat;
+import common.*;
 
 public class ServerThread extends Thread {
     private Socket clientSocket;
@@ -58,6 +59,8 @@ public class ServerThread extends Thread {
                     broadcastMsg(chat);
                 }
             }
+        } catch (SocketException e) {
+            System.out.println(Constants.SYSTEM_NAME + "클라이언트가 채팅을 종료하였습니다.");
         } catch (IOException e) {
             e.printStackTrace();
         } finally {

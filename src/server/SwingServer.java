@@ -1,4 +1,4 @@
-package swingchat;
+package server;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -18,6 +18,7 @@ import javax.swing.JTextField;
 
 import common.Constants;
 import common.User;
+import example.ServerThreadSwing;
 
 public class SwingServer extends JFrame implements ActionListener {
 
@@ -38,7 +39,7 @@ public class SwingServer extends JFrame implements ActionListener {
 	// private BufferedReader in = null;
 	// private BufferedWriter out = null;
 	
-	private ArrayList<ServerThread> threadList = new ArrayList<>();
+	private ArrayList<ServerThreadSwing> threadList = new ArrayList<>();
 	
 	public SwingServer(String title, int width, int height) {
 		
@@ -68,8 +69,9 @@ public class SwingServer extends JFrame implements ActionListener {
 					// 기존 접속 기록이 없다면 K-V 페어 레코드를 HashMap에 추가
                     ChatServer.addUser(new User(clientSocket.getInetAddress()));
 
-				textArea.append("연결 되었습니다!!!\n");	//연결될때마다 리스트를 만들고 add로 스레드리스트 추가
-				ServerThread st = new ServerThread(clientSocket, threadList);
+				// "새 클라이언트 연결: IP주소" 출력
+                textArea.append(ChatServer.newClient(clientSocket.getInetAddress()).toString());
+				ServerThreadSwing st = new ServerThreadSwing(clientSocket, threadList);
 				//서버 스레드 생성 후 클래스로 생성
 				//소켓을 리셋시킬거임
 				//스레드리스트를 만들거임
