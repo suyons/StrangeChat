@@ -1,4 +1,4 @@
-package client;
+package swingclient;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -20,7 +20,7 @@ import javax.swing.JTextField;
 
 import common.*;
 
-public class SwingClient extends JFrame implements ActionListener {
+public class SwingClientApp extends JFrame implements ActionListener {
 	// 폼 요소 정의
 	private JPanel panelCenter;
 	private JPanel panelSouth;
@@ -38,7 +38,7 @@ public class SwingClient extends JFrame implements ActionListener {
 	private BufferedWriter writer = null;
 
 	// 생성자를 통한 폼 생성
-	public SwingClient(String title, int width, int height) {
+	public SwingClientApp(String title, int width, int height) {
 		setTitle(title);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocation(800, 200);
@@ -149,7 +149,7 @@ public class SwingClient extends JFrame implements ActionListener {
 	}
 
 	public static void main(String[] args) {
-		SwingClient cc = new SwingClient("채팅클라이언트", 300, 400);
+		SwingClientApp cc = new SwingClientApp("StrangeChat Client", 300, 400);
 		cc.setSocket();
 	}
 

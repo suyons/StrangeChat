@@ -1,4 +1,4 @@
-package server;
+package swingserver;
 
 import java.net.InetAddress;
 import java.net.Socket;
@@ -7,11 +7,11 @@ import java.util.HashMap;
 
 import common.*;
 
-public class ChatServer {
+public class SwingChatServer {
     // 멀티스레드: 클라이언트 스레드를 ArrayList로 관리
-    private static ArrayList<ServerThread> threadList = new ArrayList<>();
+    private static ArrayList<SwingServerThread> threadList = new ArrayList<>();
 
-    static ArrayList<ServerThread> getThreadList() {
+    static ArrayList<SwingServerThread> getThreadList() {
         return threadList;
     }
 
