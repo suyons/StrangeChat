@@ -5,7 +5,6 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.net.ConnectException;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
@@ -25,26 +24,15 @@ public class ClientApp {
                 BufferedReader reader = new BufferedReader(
                         new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
                 // 클라이언트 Socket의 출력 스트림: 클라이언트 → 서버 전송 시 사용
-                PrintWriter writer = new PrintWriter(
-                        new BufferedWriter(
-                                new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8)),
-                        true)) {
+                BufferedWriter writer = new BufferedWriter(
+                        new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8))) {
             while (true) {
-                /*
-                 * 사용자의 문자열 입력을 받는 스트림
-                 * Scanner 스트림이 익숙해서 쓰고 싶은데
-                 * close()를 어디에 해야 할 지 모르겠다..
-                 * BufferedReader 쓰는 김에 깔맞춤하자!
-                 */
-                // Scanner userInput = new Scanner(System.in);
-
                 BufferedReader userInput = new BufferedReader(
                         new InputStreamReader(System.in, StandardCharsets.UTF_8));
                 // readLine(): 스트림에 들어온 것이 없다면 null을 반환한다.
                 System.out.println(reader.readLine());
                 System.out.print("＞ ");
-                writer.println(userInput.readLine());
-             
+                writer.write(userInput.readLine());
             }
 
         } catch (ConnectException e) {

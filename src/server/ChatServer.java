@@ -2,11 +2,19 @@ package server;
 
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import common.*;
 
 public class ChatServer {
+    // 멀티스레드: 클라이언트 스레드를 ArrayList로 관리
+    private static ArrayList<ClientThread> threadList = new ArrayList<>();
+
+    static ArrayList<ClientThread> getThreadList() {
+        return threadList;
+    }
+
     // userMap: K=IP주소, V=닉네임 + ChatMap: K=타임스탬프, V=대화내용
     private static HashMap<InetAddress, String> userMap = new HashMap<InetAddress, String>();
     private static HashMap<Long, String> chatMap = new HashMap<Long, String>();
