@@ -20,9 +20,14 @@ public class ChatServer {
 	private static HashMap<Long, String> chatMap = new LinkedHashMap<Long, String>();	//Linked는 순서유지
 	
 	
-	//키값, 밸류값 매개변수로 받아서 챗맵에 저장하기
-	public static void putChatmap(Long time, String chat) {
+	//K=타임스탬프, V=대화내용 받아서 chatMap에 저장
+	public static void saveChatmap(Long time, String chat) {
 		chatMap.put(time, chat);
+	}
+	
+	//K=아이피주소, V=닉네임 받아서 userMap에 저장
+	public static void saveUsermap(InetAddress ipAddr, String userName) {
+		userMap.put(ipAddr, userName);
 	}
 	
 	//챗맵에 있는 내용 가져와서 출력하기
@@ -34,11 +39,15 @@ public class ChatServer {
 			System.out.println(timestamp +" "+ content);
 		}
 	}
-			
+	
+	//해당 키 값이 있는지 여부 - userMap이 private이라 가져다 쓸라고 만듦
+	public static Boolean containsKey(InetAddress ipAddr) {
+		return userMap.containsKey(ipAddr);
+	}
 				
 
 	// userMap에서 K=IP주소 넣고 V=닉네임 꺼내기
-	static String getUserName(InetAddress ipAddr) {
+	public static String getUserName(InetAddress ipAddr) {
 		return userMap.get(ipAddr);
 	}
 
