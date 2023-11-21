@@ -6,45 +6,42 @@ import java.io.IOException;
 
 public class CSVReader {
 
-	// Chat.csv 파일 읽어오기 -> [발신자] (시간) 내용 형식으로 다시 대화출력창에 나와야함.
-
-	/*
-	public String readCSV() {
+	// Chat.csv 파일 해쉬맵에 저장하기 -> 파일 불러와서 시간, 대화내용을 해쉬맵에 저장한다.
+	public void readCSV() {
 
 		String line;
+//		String timestamp;
+//		String content = null;
+//		Long longTimestamp = null;
 
 		// Chat.csv - (배열 분류)
 		try (BufferedReader fr = new BufferedReader(new FileReader("Chat.csv"))) {
 
-			while ((line = fr.readLine()) != null) {
-				String[] data = line.split(",");
-				if (data[0].equals("시간"))
+			while ((line = fr.readLine()) != null) {// csv 파일의 한 줄을 불러온다.
+				String[] data = line.split(","); // 한줄에서 쉼표를 기준으로 문자열을 분리한다.
+				if (data[0].equals("시간")) // 만약 data[0]에 들어가는 문자가 시간이면 while문을 스킵한다. -> 첫번째 행 스킵
 					continue;
-				System.out.println(data[0] + "," + data[1] + "," + data[2]);
+				ChatServer.putCsv(Long.valueOf(data[0]), data[1]);
 
-//				StringBuilder sb = new StringBuilder();
-//				String result = "[" + data[0] + "]" + " (" + 
-
-				for (int i = 3; i < data.length; i++) {
-					if (i % 3 == 0) {
-						String time = sb.append(data[i]);
-					} else if (i % 3 == 1) {
-						String name = data[i];
-					} else if (i % 3 == 2) {
-						String content = data[i];
-					} else
-						break;
-				}
+				/*
+				 * for (int i = 2; i < data.length; i++) { if (i % 2 == 0) { timestamp =
+				 * data[i]; longTimestamp = Long.valueOf(timestamp); //timestamp가 String형이므로
+				 * Long형으로 바꿔야한다. } else if (i % 3 == 1) { name = data[i]; } else if (i % 2 !=
+				 * 0) { content = data[i]; } else break; }
+				 * 
+				 * ChatServer.putCsv(longTimestamp, content);
+				 */
 			}
 			fr.close();
+			// putCsv: CSV → HashMap으로 쓰기
+			// chatMap에 csv 파일 넣기
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return ("[" + name + "] " + "(" + time + ")" + content);
 	}
 
 }
-*/
+
 //
 //	static void testLine() {
 //		String line;

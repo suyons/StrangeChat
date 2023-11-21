@@ -17,7 +17,25 @@ import common.User;
 public class ChatServer {
 	// userMap: K=IP주소, V=닉네임 + ChatMap: K=타임스탬프, V=대화내용
 	private static HashMap<InetAddress, String> userMap = new LinkedHashMap<InetAddress, String>();
-	private static HashMap<Long, String> chatMap = new LinkedHashMap<Long, String>();
+	private static HashMap<Long, String> chatMap = new LinkedHashMap<Long, String>();	//Linked는 순서유지
+	
+	
+	//키값, 밸류값 매개변수로 받아서 챗맵에 저장하기
+	public static void putCsv(Long time, String chat) {
+		chatMap.put(time, chat);
+	}
+	
+	//챗맵에 있는 내용 가져와서 출력하기
+	public static void printChatmap() {
+		Iterator<Long> ir = chatMap.keySet().iterator();
+		while (ir.hasNext()) {
+			Long timestamp = ir.next();
+			String content = chatMap.get(timestamp);
+			System.out.println(timestamp +" "+ content);
+		}
+	}
+			
+				
 
 	// userMap에서 K=IP주소 넣고 V=닉네임 꺼내기
 	static String getUserName(InetAddress ipAddr) {
@@ -64,12 +82,13 @@ public class ChatServer {
 	
 	// Chat.csv 파일에 시간, 대화내용, 닉네임 입력
 			public static void addChatCsv(InetAddress ipAddr) throws IOException {
-				try (FileWriter fw = new FileWriter("Chat.csv")) {
+				try (FileWriter fw = new FileWriter("Chat.csv",true)) {
 					//대화 출력을 위한 반복자
 					Iterator<Long> chatIr = chatMap.keySet().iterator();
 					while (chatIr.hasNext()) {
 						Long timestamp = chatIr.next();
-						String time = Chat.dateTime(timestamp);
+						String time = String.valueOf(timestamp);  //String.valueOf() : 스트링형으로 형변환시켜주는 메서드
+//						String time = Chat.dateTime(timestamp);
 						String chat = chatMap.get(timestamp);
 
 						//유저 이름 출력을 위한 반복자
@@ -81,8 +100,8 @@ public class ChatServer {
 						fw.write("\n");
 						fw.write(time);
 						fw.write(",");
-						fw.write(userName); 	 //여기서 IOException user부분 삭제하면 저장 잘됨
-						fw.write(",");
+//						fw.write(userName); 	 //HashMap은 K,V로 한 쌍이기 때문에 유저네임 뺌..
+//						fw.write(",");
 //						fw.write(chat);
 //						fw.write("\"" + chat + "\"");
 						fw.write('"' + chat + '"');
@@ -93,19 +112,6 @@ public class ChatServer {
 
 			}
 					
-	//chatMap에 있는 이전 대화 목록 꺼내오기
-//	public void beforeChat() {
-//		try(FileReader fr = new FileReader("Chat.csv")){
-//			int i;
-//			fr.r
-//			while() {
-//				System.out.println((char)i);
-//			}
-//		} catch(IOException e) {
-//			e.printStackTrace();
-//		}
-//	}
-
 	// ServerSocket 생성 이후 클라이언트 대기 메시지 출력
 	// [시스템] 글머리: 서버에서만 보입니다. 클라이언트로 전송하지 않습니다.
 	// Chat 클래스에서 String content를 반환하도록 toString() 재정의됨
@@ -141,9 +147,9 @@ public class ChatServer {
 	// [사용자명] 글머리: 모든 클라이언트와 서버에서 표시됩니다.
 	static String clientsChat(InetAddress ipAddr, String content) {
 		Chat chat = new Chat();
-		chat.content = content; //대화 내용만 출력하고 싶어서 [발신자] (시간) 내용 형식 말고 그냥 content 대입 
+		chat.content = "[" + getUserName(ipAddr) + "] " + Chat.hourMinute(chat.timestamp) + content; //대화 내용만 출력하고 싶어서 [발신자] (시간) 내용 형식 말고 그냥 content 대입 
 		addChat(chat); // chatMap에 저장하는 메서드
-		return "[" + getUserName(ipAddr) + "] " + Chat.hourMinute(chat.timestamp) + content;
+		return content;
 	}
 
 	

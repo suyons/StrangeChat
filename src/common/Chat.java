@@ -23,6 +23,14 @@ public class Chat {
 		String dateTime = sdf.format(new Date(stamp));
 		return dateTime;
 	}
+	
+//	//dateTime -> stamp로 다시 변환하기
+//	public static Long stamp(String DateTime) {
+//		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//		Date date = sdf.parse(DateTime);
+//		return stamp;
+//	}
+	
 
 	// (시:분) 형식으로 반환
 	public static String hourMinute(long stamp) {

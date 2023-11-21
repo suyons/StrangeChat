@@ -46,10 +46,8 @@ public class ClientApp {
                 }
                 // 입력된 문자열을 서버로 전송한다.
                 writer.println(content);
-//              writer.println(userInput.readLine());
-
+//              writer.println(userInput.readLine()); 
 			}
-
 		} catch (ConnectException e) {
 			System.out.println(Constants.SYSTEM_NAME + "서버를 찾지 못했습니다.");
 		} catch (IOException e) {

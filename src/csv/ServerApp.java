@@ -22,7 +22,12 @@ public class ServerApp {
 		try {
 			serverSocket = new ServerSocket(Constants.SERVER_PORT);
 			System.out.println(ChatServer.waiting());
-
+			
+			// 이전 대화목록 다시 보여주기 - chatMap에 있던 대화내용 보여주기 - HashMap을 이용해서 보여주기!
+			CSVReader csvReader = new CSVReader();
+			csvReader.readCSV();
+			ChatServer.printChatmap();
+			
 			while (true) {
 				// serverSocket.accept(): 연결된 Socket 객체를 반환
 				clientSocket = serverSocket.accept();
@@ -41,10 +46,6 @@ public class ServerApp {
 				PrintWriter writer = new PrintWriter(new BufferedWriter(
 						new OutputStreamWriter(clientSocket.getOutputStream(), StandardCharsets.UTF_8)), true);
 
-				// 이전 대화목록 다시 보여주기 - chatMap에 있던 대화내용 보여주기
-//				CSVReader csvReader = new CSVReader();
-//				writer.println(csvReader.readCSV());
-				
 				// 클라이언트 접속 시 "OOOO님 반갑습니다!" 출력
 				writer.println(ChatServer.greeting(clientSocket));
 				
