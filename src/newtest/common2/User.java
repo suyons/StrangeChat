@@ -1,7 +1,9 @@
-package common2;
+package newtest.common2;
 
 import java.util.Arrays;
 import java.util.List;
+
+import csv.ChatServer;
 
 public class User {
     /* 이름 구성: 색상 2자 + 농산물 2자, List에서 무작위 추출하여 결합할 것 */
@@ -21,9 +23,13 @@ public class User {
      */ 
     public User(String ipAddr) {
         this.ipAddr = ipAddr;
-        if (this.ipAddr.equals(Constants.SERVER_ADDR))
+        
+        if (this.ipAddr.equals(Constants.SERVER_ADDR)) {
             this.userName = Constants.ADMIN_NAME;
-        else
-            this.userName = nameList1.get((int) (Math.random() * 12)) + nameList2.get((int) (Math.random() * 12));
+        }
+        else if(ChatServer.getUserName(ipAddr)!= null) {
+        	this.userName = ChatServer.getUserName(ipAddr);
+        } else
+        	this.userName = nameList1.get((int) (Math.random() * 12)) + nameList2.get((int) (Math.random() * 12));
     }
 }

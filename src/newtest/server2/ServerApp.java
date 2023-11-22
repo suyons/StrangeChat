@@ -1,10 +1,10 @@
-package server2;
+package newtest.server2;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import common2.*;
+import newtest.common2.*;
 
 public class ServerApp {
     public static void main(String[] args) {

@@ -1,4 +1,4 @@
-package client2;
+package newtest.client2;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

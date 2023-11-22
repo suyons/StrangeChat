@@ -1,4 +1,4 @@
-package server2;
+package newtest.server2;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -11,7 +11,7 @@ import java.net.SocketException;
 import java.nio.charset.StandardCharsets;
 import java.util.ConcurrentModificationException;
 
-import common2.*;
+import newtest.common2.*;
 
 public class ServerThread extends Thread {
     private Socket clientSocket;

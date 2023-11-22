@@ -1,9 +1,13 @@
-package server2;
+package newtest.server2;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 
-import common2.*;
+import newtest.common2.*;
 
 public class ChatServer {
     // 멀티스레드: 클라이언트 스레드를 ArrayList로 관리
@@ -15,9 +19,19 @@ public class ChatServer {
     }
 
     // userMap: K(IP주소) + V(닉네임) / ChatMap: K(타임스탬프) + V(대화내용)
-    private static HashMap<String, String> userMap = new HashMap<String, String>();
-    private static HashMap<Long, String> chatMap = new HashMap<Long, String>();
+    private static HashMap<String, String> userMap = new LinkedHashMap<String, String>();
+    private static HashMap<Long, String> chatMap = new LinkedHashMap<Long, String>();
 
+  	//챗맵에 있는 내용 가져와서 출력하기
+  	public static void printChatmap() {
+  		Iterator<Long> ir = chatMap.keySet().iterator();
+  		while (ir.hasNext()) {
+  			Long timestamp = ir.next();
+  			String content = chatMap.get(timestamp);
+  			System.out.println(timestamp +" "+ content);
+  		}
+  	}
+    
     // userMap에서 K=IP주소 넣고 V=닉네임 꺼내기
     static String getUserName(String ipAddr) {
         return userMap.get(ipAddr);
@@ -48,6 +62,25 @@ public class ChatServer {
         chatMap.put(timestamp, content);
     }
 
+    // User.csv 파일에 IP주소, 닉네임 기록
+ 	static void addUserCsv(User user) {
+
+ 		try (FileWriter fw = new FileWriter("User.csv", true)) {
+ 			fw.write("\n" + user.ipAddr + "," + user.userName);
+ 		} catch (IOException e) {
+ 			e.printStackTrace();
+ 		}
+ 	}
+
+ 	// Chat.csv 파일에 시간, 대화내용, 닉네임 입력
+ 	public static void addChatCsv(Chat chat) {
+ 		try (FileWriter fw = new FileWriter("Chat.csv", true)) {
+ 			fw.write("\n" + chat.timestamp + "," + '"' + chat.content + '"');
+ 		} catch (IOException e) {
+ 			System.out.println("Chat.csv파일을 찾을 수 없습니다.");
+ 		}
+ 	}
+    
     /* ServerSocket 생성 이후 클라이언트 대기 메시지 출력
      * [시스템] 서버에서만 보입니다. 클라이언트로 전송하지 않습니다.
      * Chat 클래스에서 String content를 반환하도록 toString() 재정의됨
@@ -56,7 +89,7 @@ public class ChatServer {
         Chat chat = new Chat();
         chat.content = Constants.SYSTEM_NAME + Chat.hourMinute(chat.timestamp)
                 + Constants.SERVER_PORT + "번 포트 연결 대기 중입니다.";
-        addChat(chat);
+//        addChat(chat); 이거 추가하면 대화내용 csv 파일에 나옴
         return chat;
     }
 
@@ -66,7 +99,7 @@ public class ChatServer {
         Chat chat = new Chat();
         chat.content = Constants.SYSTEM_NAME + Chat.hourMinute(chat.timestamp)
                 + "새 클라이언트 연결: " + ipAddr + " <" + getUserName(ipAddr) + ">";
-        addChat(chat);
+//      addChat(chat); 이거 추가하면 대화내용 csv 파일에 나옴
         return chat;
     }
 
@@ -76,7 +109,7 @@ public class ChatServer {
         Chat chat = new Chat();
         chat.content = Constants.SYSTEM_NAME + Chat.hourMinute(chat.timestamp)
                 + getUserName(ipAddr) + "님께서 입장하셨습니다.";
-        addChat(chat);
+//      addChat(chat); 이거 추가하면 대화내용 csv 파일에 나옴
         return chat;
     }
 
@@ -95,7 +128,7 @@ public class ChatServer {
         Chat chat = new Chat();
         chat.content = Constants.SYSTEM_NAME + Chat.hourMinute(chat.timestamp)
                 + getUserName(ipAddr) + "님께서 퇴장하셨습니다.";
-        addChat(chat);
+//      addChat(chat); 이거 추가하면 대화내용 csv 파일에 나옴
         return chat;
     }
 }

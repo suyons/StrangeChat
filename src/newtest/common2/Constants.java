@@ -1,4 +1,4 @@
-package common2;
+package newtest.common2;
 
 public class Constants {
     /* 여러 클래스에서 공동으로 사용하는 상수

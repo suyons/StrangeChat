@@ -1,4 +1,4 @@
-package client2;
+package newtest.client2;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -23,7 +23,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import common2.*;
+import newtest.common2.*;
 
 public class SwingClientApp extends JFrame implements ActionListener {
 	// 폼 요소 정의
