@@ -51,6 +51,7 @@ public class ChatServer {
     // chatMap에서 <K, V> 1쌍 추가
     static void addChat(Chat chat) {
         chatMap.put(chat.timestamp, chat.content);
+        CSVReader.addChatCsv(chat);
     }
 
     // addChat() 메서드 오버로딩 → CSV 파일 불러오기
@@ -89,16 +90,6 @@ public class ChatServer {
                 + getUserName(ipAddr) + "님께서 입장하셨습니다.";
         addChat(chat);
         return chat;
-    }
-
-    // chatMap에 있는 내용 가져와서 출력하기
-    public static void printChatmap() {
-        Iterator<Long> ir = chatMap.keySet().iterator();
-        while (ir.hasNext()) {
-            Long timestamp = ir.next();
-            String content = chatMap.get(timestamp);
-            System.out.println(content);
-        }
     }
 
     // 클라이언트가 전송한 채팅을 chatMap에 저장하고, [발신자] (시간) 내용 형식으로 반환
