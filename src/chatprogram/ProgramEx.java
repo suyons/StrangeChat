@@ -9,11 +9,11 @@ public class ProgramEx {
 
     public ProgramEx() {
         commands = new ArrayList<>();
-        commands.add("안녕");
-        commands.add("안녕하세요");
-        commands.add("안녕하세요!");
-        commands.add("종료");
-        commands.add("나가기");
+        commands.add("/안녕");
+        commands.add("/안녕하세요");
+        commands.add("/안녕하세요!");
+        commands.add("/종료");
+        commands.add("/나가기");
     }
 
     public void sendMessage(String message) {
