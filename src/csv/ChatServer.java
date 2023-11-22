@@ -89,37 +89,46 @@ public class ChatServer {
 	}
 	
 	// Chat.csv 파일에 시간, 대화내용, 닉네임 입력
-			public static void addChatCsv(InetAddress ipAddr) throws IOException {
+			public static void addChatCsv(InetAddress irAddr) throws IOException {
 				try (FileWriter fw = new FileWriter("Chat.csv",true)) {
 					//대화 출력을 위한 반복자
 					Iterator<Long> chatIr = chatMap.keySet().iterator();
+					
 					while (chatIr.hasNext()) {
 						Long timestamp = chatIr.next();
+//						Long lastTimestamp = chatIr.next();
+//						
+//						//새로 추가된 대화만 파일에 기록
+//						if(timestamp > lastTimestamp) {
 						String time = String.valueOf(timestamp);  //String.valueOf() : 스트링형으로 형변환시켜주는 메서드
 //						String time = Chat.dateTime(timestamp);
 						String chat = chatMap.get(timestamp);
 
-						//유저 이름 출력을 위한 반복자
-						Iterator<InetAddress> userIr = userMap.keySet().iterator();
-						while (userIr.hasNext()) {
-							ipAddr = userIr.next();
-							String userName = userMap.get(ipAddr);
 
 						fw.write("\n");
 						fw.write(time);
 						fw.write(",");
-//						fw.write(userName); 	 //HashMap은 K,V로 한 쌍이기 때문에 유저네임 뺌..
-//						fw.write(",");
-//						fw.write(chat);
-//						fw.write("\"" + chat + "\"");
 						fw.write('"' + chat + '"');
+						}
 					}
-				}} catch (IOException e) {
+				 catch (IOException e) {
 					e.printStackTrace();
 				}
 
 			}
 					
+//	//chat.csv에 대화 내용 중복 저장 안되게 timestamp 비교하는 메서드
+//	private static Long getLastTimestamp(Long timestamp) {
+//		
+//		Long lastTimestamp = 0L;
+//		
+//		for(Long timestamp : chatMap.keySet())
+//			if(timestamp > lastTimestamp)
+//				timestamp = lastTimestamp;
+//		
+//		return lastTimestamp;
+//	}
+
 	// ServerSocket 생성 이후 클라이언트 대기 메시지 출력
 	// [시스템] 글머리: 서버에서만 보입니다. 클라이언트로 전송하지 않습니다.
 	// Chat 클래스에서 String content를 반환하도록 toString() 재정의됨
