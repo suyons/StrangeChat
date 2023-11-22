@@ -17,7 +17,7 @@ import common.User;
 public class ChatServer {
 	// userMap: K=IP주소, V=닉네임 + ChatMap: K=타임스탬프, V=대화내용
 	private static HashMap<InetAddress, String> userMap = new LinkedHashMap<InetAddress, String>();
-	private static HashMap<Long, String> chatMap = new LinkedHashMap<Long, String>();	//Linked는 순서유지
+	public static HashMap<Long, String> chatMap = new LinkedHashMap<Long, String>();	//Linked는 순서유지
 	
 	
 	//K=타임스탬프, V=대화내용 받아서 chatMap에 저장
@@ -40,16 +40,11 @@ public class ChatServer {
 		}
 	}
 	
-	//해당 키 값이 있는지 여부 - userMap이 private이라 가져다 쓸라고 만듦
-	public static Boolean containsKey(InetAddress ipAddr) {
-		return userMap.containsKey(ipAddr);
-	}
-				
-
 	// userMap에서 K=IP주소 넣고 V=닉네임 꺼내기
 	public static String getUserName(InetAddress ipAddr) {
 		return userMap.get(ipAddr);
 	}
+	
 
 	// chatMap에서 K=타임스탬프 넣고 V=대화내용 꺼내기
 	static String getChatContents(Long timestamp) {
@@ -64,6 +59,7 @@ public class ChatServer {
 	// chatMap에서 <K, V> 1쌍 추가
 	static void addChat(Chat chat) {
 		chatMap.put(chat.timestamp, chat.content);
+		addChatCsv(chat);
 	}
 
 	// User.csv 파일에 IP주소, 닉네임 기록
@@ -80,7 +76,6 @@ public class ChatServer {
 				fw.write(IpAdress);
 				fw.write(",");
 				fw.write(userName);
-
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -89,45 +84,16 @@ public class ChatServer {
 	}
 	
 	// Chat.csv 파일에 시간, 대화내용, 닉네임 입력
-			public static void addChatCsv(InetAddress irAddr) throws IOException {
+			public static void addChatCsv(Chat chat){
 				try (FileWriter fw = new FileWriter("Chat.csv",true)) {
-					//대화 출력을 위한 반복자
-					Iterator<Long> chatIr = chatMap.keySet().iterator();
-					
-					while (chatIr.hasNext()) {
-						Long timestamp = chatIr.next();
-//						Long lastTimestamp = chatIr.next();
-//						
-//						//새로 추가된 대화만 파일에 기록
-//						if(timestamp > lastTimestamp) {
-						String time = String.valueOf(timestamp);  //String.valueOf() : 스트링형으로 형변환시켜주는 메서드
-//						String time = Chat.dateTime(timestamp);
-						String chat = chatMap.get(timestamp);
-
-
 						fw.write("\n");
-						fw.write(time);
-						fw.write(",");
-						fw.write('"' + chat + '"');
+						fw.write(chat.timestamp + "," + '"' + chat.content + '"');
 						}
-					}
-				 catch (IOException e) {
-					e.printStackTrace();
+				catch (IOException e) {
+					System.out.println("Chat.csv파일을 찾을 수 없습니다."); 
 				}
-
 			}
-					
-//	//chat.csv에 대화 내용 중복 저장 안되게 timestamp 비교하는 메서드
-//	private static Long getLastTimestamp(Long timestamp) {
-//		
-//		Long lastTimestamp = 0L;
-//		
-//		for(Long timestamp : chatMap.keySet())
-//			if(timestamp > lastTimestamp)
-//				timestamp = lastTimestamp;
-//		
-//		return lastTimestamp;
-//	}
+			
 
 	// ServerSocket 생성 이후 클라이언트 대기 메시지 출력
 	// [시스템] 글머리: 서버에서만 보입니다. 클라이언트로 전송하지 않습니다.

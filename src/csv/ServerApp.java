@@ -67,8 +67,8 @@ public class ServerApp {
 					String chat = ChatServer.clientsChat(clientSocket.getInetAddress(), content);
 					System.out.println(chat); // [발신자] (시간) 내용 형식 출력
 					writer.println(chat); // 서버 -> 클라이언트에게 chat 전송
-					// Chat.csv 파일에 시간, 대화내용 넣기 $$$$$$$$$$$$$$$$$$$$$$$
-					ChatServer.addChatCsv(serverSocket.getInetAddress());
+					// Chat.csv 파일에 시간, 대화내용 넣기 (맨앞에서 이미 chat맵에 이전 대화목록을 불러옴 - 같이 중복 저장될 가능성이 있음=>메서드에 조건문)
+//					ChatServer.addChatCsv(serverSocket.getInetAddress());
 				}
 				
 			} 
