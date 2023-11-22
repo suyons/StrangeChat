@@ -68,7 +68,7 @@ public class ChatServer {
         Chat chat = new Chat();
         chat.content = Constants.SYSTEM_NAME + Chat.hourMinute(chat.timestamp)
                 + Constants.SERVER_PORT + "번 포트 연결 대기 중입니다.";
-        addChat(chat);
+        // addChat(chat);
         return chat;
     }
 
@@ -78,7 +78,7 @@ public class ChatServer {
         Chat chat = new Chat();
         chat.content = Constants.SYSTEM_NAME + Chat.hourMinute(chat.timestamp)
                 + "새 클라이언트 연결: " + ipAddr + " <" + getUserName(ipAddr) + ">";
-        addChat(chat);
+        // addChat(chat);
         return chat;
     }
 
