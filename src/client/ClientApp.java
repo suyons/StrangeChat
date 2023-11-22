@@ -29,7 +29,6 @@ public class ClientApp {
 				PrintWriter writer = new PrintWriter(
 						new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8)),
 						true)) {
-			
 			while (true) {
 				/*
 				 * 사용자의 문자열 입력을 받는 스트림 Scanner 스트림이 익숙해서 쓰고 싶은데 close()를 어디에 해야 할 지 모르겠다..
@@ -53,6 +52,6 @@ public class ClientApp {
 			System.out.println(Constants.SYSTEM_NAME + "서버를 찾지 못했습니다.");
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
+		} 
 	}
 }

@@ -23,14 +23,14 @@ public class ServerApp {
 			serverSocket = new ServerSocket(Constants.SERVER_PORT);	//서버소캣 생성
 			System.out.println(ChatServer.waiting());	//클라이언트 대기 메시지 출력
 			
+			// 이전 대화목록 다시 보여주기 - chatMap에 있던 대화내용 보여주기 
+			CSVReader csvReader = new CSVReader(); //csv파일 hashmap에 저장하는 클래스
+			csvReader.saveChatCsv();	//csv파일을 chatmap에 저장하는 메서드##############
+			csvReader.saveUserCsv();	//csv파일을 usermap에 저장하는 메서드
+			ChatServer.printChatmap(); //이전 대화내용 출력
+			
 			while (true) {
 				clientSocket = serverSocket.accept(); // serverSocket.accept(): 연결된 Socket 객체를 반환
-				
-				// 이전 대화목록 다시 보여주기 - chatMap에 있던 대화내용 보여주기
-				CSVReader csvReader = new CSVReader(); //csv파일 hashmap에 저장하는 클래스
-				csvReader.saveChatCsv();	//csv파일 hashmap에 저장하는 메서드
-				csvReader.saveUserCsv();	//csv파일 usermap에 저장하는 메서드
-				ChatServer.printChatmap(); //이전 대화내용 출력
 				
 				// V HashMap.get(K): HashMap에서 K에 해당하는 V 페어가 없다면 null을 반환
 				// getUserName() : K값 ip주소 넣어서 V값 가져오기
@@ -42,9 +42,7 @@ public class ServerApp {
 					ChatServer.addUser(new User(clientSocket.getInetAddress()));
 					// User.csv 파일에 생성된 유저 아이피주소, 닉네임 저장하기 
 					ChatServer.addUserCsv(clientSocket.getInetAddress());
-				} else {
-					
-				}
+				} 
 				
 				// "새 클라이언트 연결: IP주소" 출력
 				System.out.println(ChatServer.newClient(clientSocket.getInetAddress()));
@@ -69,10 +67,11 @@ public class ServerApp {
 					String chat = ChatServer.clientsChat(clientSocket.getInetAddress(), content);
 					System.out.println(chat); // [발신자] (시간) 내용 형식 출력
 					writer.println(chat); // 서버 -> 클라이언트에게 chat 전송
-					// Chat.csv 파일에 시간, 유저닉네임, 대화내용 넣기
+					// Chat.csv 파일에 시간, 대화내용 넣기 $$$$$$$$$$$$$$$$$$$$$$$
 					ChatServer.addChatCsv(serverSocket.getInetAddress());
 				}
-			}
+				
+			} 
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
