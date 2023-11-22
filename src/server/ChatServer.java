@@ -2,8 +2,12 @@ package server;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 
-import common.*;
+import common.Chat;
+import common.Constants;
+import common.User;
 
 public class ChatServer {
     // 멀티스레드: 클라이언트 스레드를 ArrayList로 관리
@@ -15,11 +19,11 @@ public class ChatServer {
     }
 
     // userMap: K(IP주소) + V(닉네임) / ChatMap: K(타임스탬프) + V(대화내용)
-    private static HashMap<String, String> userMap = new HashMap<String, String>();
-    private static HashMap<Long, String> chatMap = new HashMap<Long, String>();
+    private static HashMap<String, String> userMap = new LinkedHashMap<String, String>();
+    private static HashMap<Long, String> chatMap = new LinkedHashMap<Long, String>();
 
     // userMap에서 K=IP주소 넣고 V=닉네임 꺼내기
-    static String getUserName(String ipAddr) {
+    public static String getUserName(String ipAddr) {
         return userMap.get(ipAddr);
     }
 
@@ -28,9 +32,15 @@ public class ChatServer {
         return chatMap.get(timestamp);
     }
 
+    // chatMap 반복자 get() 메서드
+    static Iterator<Long> getIterator() {
+        return chatMap.keySet().iterator();
+    }
+
     // userMap에서 <K, V> 1쌍 추가
     static void addUser(User user) {
         userMap.put(user.ipAddr, user.userName);
+        CSVReader.addUserCsv(user);
     }
 
     // addUser() 메서드 오버로딩 → CSV 파일 불러오기
@@ -48,7 +58,8 @@ public class ChatServer {
         chatMap.put(timestamp, content);
     }
 
-    /* ServerSocket 생성 이후 클라이언트 대기 메시지 출력
+    /*
+     * ServerSocket 생성 이후 클라이언트 대기 메시지 출력
      * [시스템] 서버에서만 보입니다. 클라이언트로 전송하지 않습니다.
      * Chat 클래스에서 String content를 반환하도록 toString() 재정의됨
      */
@@ -78,6 +89,16 @@ public class ChatServer {
                 + getUserName(ipAddr) + "님께서 입장하셨습니다.";
         addChat(chat);
         return chat;
+    }
+
+    // chatMap에 있는 내용 가져와서 출력하기
+    public static void printChatmap() {
+        Iterator<Long> ir = chatMap.keySet().iterator();
+        while (ir.hasNext()) {
+            Long timestamp = ir.next();
+            String content = chatMap.get(timestamp);
+            System.out.println(content);
+        }
     }
 
     // 클라이언트가 전송한 채팅을 chatMap에 저장하고, [발신자] (시간) 내용 형식으로 반환

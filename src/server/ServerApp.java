@@ -12,6 +12,13 @@ public class ServerApp {
         try (ServerSocket serverSocket = new ServerSocket(Constants.SERVER_PORT)) {
             /* Part I: 서버 내부에서의 동작, 클라이언트는 볼 수 없음 */
             System.out.println(ChatServer.waiting());
+
+            // 이전 대화목록 다시 보여주기 - chatMap에 있던 대화내용 보여주기
+            CSVReader csvReader = new CSVReader(); // csv파일 hashmap에 저장하는 클래스
+            csvReader.saveChatCsv(); // csv파일을 chatmap에 저장하는 메서드
+            csvReader.saveUserCsv(); // csv파일을 usermap에 저장하는 메서드
+            ChatServer.printChatmap(); // 이전 대화내용 출력
+
             while (true) {
                 // serverSocket.accept(): 연결된 클라이언트의 Socket형 객체를 반환
                 Socket clientSocket = serverSocket.accept();

@@ -10,6 +10,7 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.nio.charset.StandardCharsets;
 import java.util.ConcurrentModificationException;
+import java.util.Iterator;
 
 import common.*;
 
@@ -48,6 +49,8 @@ public class ServerThread extends Thread {
                             new OutputStreamWriter(
                                     clientSocket.getOutputStream(), StandardCharsets.UTF_8)),
                     true);
+
+            showPreviousMsg();
 
             // Server continuously listens for messages from the client
             while (true) {
@@ -94,5 +97,15 @@ public class ServerThread extends Thread {
         if (chat != null)
             for (ServerThread thread : ChatServer.getThreadList())
                 thread.writer.println(chat.toString());
+    }
+
+    // 클라이언트 신규 입장 시 이전 대화 내용을 전송
+    private void showPreviousMsg() {
+        Iterator<Long> ir = ChatServer.getIterator();
+        while (ir.hasNext()) {
+            Long timestamp = ir.next();
+            String content = ChatServer.getChatContents(timestamp);
+            writer.println(content);
+        }
     }
 }
