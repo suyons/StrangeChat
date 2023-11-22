@@ -9,11 +9,12 @@ public class ChatServer {
     // 멀티스레드: 클라이언트 스레드를 ArrayList로 관리
     private static ArrayList<ServerThread> threadList = new ArrayList<>();
 
+    // ArrayList get() 메서드
     static ArrayList<ServerThread> getThreadList() {
         return threadList;
     }
 
-    // userMap: K=IP주소, V=닉네임 + ChatMap: K=타임스탬프, V=대화내용
+    // userMap: K(IP주소) + V(닉네임) / ChatMap: K(타임스탬프) + V(대화내용)
     private static HashMap<String, String> userMap = new HashMap<String, String>();
     private static HashMap<Long, String> chatMap = new HashMap<Long, String>();
 
@@ -32,7 +33,7 @@ public class ChatServer {
         userMap.put(user.ipAddr, user.userName);
     }
 
-    // addUser() 메서드 오버로딩 → Load CSV to HashMap
+    // addUser() 메서드 오버로딩 → CSV 파일 불러오기
     static void addUser(String ipAddr, String userName) {
         userMap.put(ipAddr, userName);
     }
@@ -42,14 +43,15 @@ public class ChatServer {
         chatMap.put(chat.timestamp, chat.content);
     }
 
-    // addChat() 메서드 오버로딩 → Load CSV to HashMap
+    // addChat() 메서드 오버로딩 → CSV 파일 불러오기
     static void addChat(long timestamp, String content) {
         chatMap.put(timestamp, content);
     }
 
-    // ServerSocket 생성 이후 클라이언트 대기 메시지 출력
-    // [시스템] 글머리: 서버에서만 보입니다. 클라이언트로 전송하지 않습니다.
-    // Chat 클래스에서 String content를 반환하도록 toString() 재정의됨
+    /* ServerSocket 생성 이후 클라이언트 대기 메시지 출력
+     * [시스템] 서버에서만 보입니다. 클라이언트로 전송하지 않습니다.
+     * Chat 클래스에서 String content를 반환하도록 toString() 재정의됨
+     */
     static Chat waiting() {
         Chat chat = new Chat();
         chat.content = Constants.SYSTEM_NAME + Chat.hourMinute(chat.timestamp)
@@ -59,7 +61,7 @@ public class ChatServer {
     }
 
     // 클라이언트 접속 시 IP주소를 출력
-    // [시스템] 글머리: 서버에서만 보입니다. 클라이언트로 전송하지 않습니다.
+    // [시스템] 서버에서만 보입니다. 클라이언트로 전송하지 않습니다.
     static Chat newClient(String ipAddr) {
         Chat chat = new Chat();
         chat.content = Constants.SYSTEM_NAME + Chat.hourMinute(chat.timestamp)
@@ -68,18 +70,18 @@ public class ChatServer {
         return chat;
     }
 
-    // 클라이언트 접속 시 userMap에서 해당 사용자명을 찾아오며 환영인사를 반환
-    // [서버] 글머리: 모든 클라이언트와 서버에서 표시됩니다.
+    // 클라이언트 접속 시 userMap에서 해당 사용자명을 찾아와 입장 알림
+    // [시스템] 모든 클라이언트와 서버에서 표시됩니다.
     static Chat clientJoined(String ipAddr) {
         Chat chat = new Chat();
-        chat.content = Constants.SERVER_NAME + Chat.hourMinute(chat.timestamp)
+        chat.content = Constants.SYSTEM_NAME + Chat.hourMinute(chat.timestamp)
                 + getUserName(ipAddr) + "님께서 입장하셨습니다.";
         addChat(chat);
         return chat;
     }
 
     // 클라이언트가 전송한 채팅을 chatMap에 저장하고, [발신자] (시간) 내용 형식으로 반환
-    // [사용자명] 글머리: 모든 클라이언트와 서버에서 표시됩니다.
+    // [사용자명] 모든 클라이언트와 서버에서 표시됩니다.
     static Chat clientsChat(String ipAddr, String content) {
         Chat chat = new Chat();
         chat.content = "[" + getUserName(ipAddr) + "] " + Chat.hourMinute(chat.timestamp) + content;
@@ -87,17 +89,13 @@ public class ChatServer {
         return chat;
     }
 
+    // 클라이언트 앱 종료로 SocketException이 발생했을 때 퇴장 알림
+    // [시스템] 모든 클라이언트와 서버에서 표시됩니다.
     static Chat clientLeft(String ipAddr) {
         Chat chat = new Chat();
         chat.content = Constants.SYSTEM_NAME + Chat.hourMinute(chat.timestamp)
                 + getUserName(ipAddr) + "님께서 퇴장하셨습니다.";
         addChat(chat);
         return chat;
-    }
-
-    // (미구현) 기능 추가 예시: 사용자명 변경
-    static void changeUserName(String ipAddr, String name) {
-        // HashMap의 Value 수정
-        // CSV 파일에 저장된 내용 수정
     }
 }

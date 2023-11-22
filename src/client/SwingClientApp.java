@@ -23,22 +23,25 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import common.Constants;
+import common.*;
 
 public class SwingClientApp extends JFrame implements ActionListener {
 	// 폼 요소 정의
 	private JPanel panelCenter;
 	private JPanel panelSouth;
 
-	// TextField: 단일 행 입출력 가능 → 신규 대화 입력 영역
+	// JTextField: 단일 행 입출력 가능 → 신규 대화 입력 영역
 	private JTextField textField;
 	private JButton button1;
 
-	// TextArea: 여러 행 입출력 가능 → 대화 내용 보기 영역
+	// JTextArea: 여러 행 입출력 가능 → 대화 내용 보기 영역
 	private JTextArea textArea;
+	// JScrollPane: 엘리베이터 통로
 	private JScrollPane scrollPane;
+	// JScrollBar: 엘리베이터
 	private JScrollBar scrollBar;
 
+	// Socket 및 입출력 스트림 정의
 	private Socket socket;
 	private BufferedReader reader;
 	private PrintWriter writer;
@@ -58,7 +61,8 @@ public class SwingClientApp extends JFrame implements ActionListener {
 		textField.requestFocus();
 	}
 
-	// 대화내용 표시하는 텍스트 영역 정의
+	// 상단의 대화내용 표시 텍스트 영역 정의
+	// JPanel + JTextArea + JScrollPane
 	private void setCenter() {
 		panelCenter = new JPanel();
 		panelCenter.setBackground(Color.BLUE);
@@ -76,14 +80,17 @@ public class SwingClientApp extends JFrame implements ActionListener {
 		add(panelCenter, BorderLayout.CENTER);
 	}
 
-	// 전송 버튼 정의
+	// 하단의 대화 입력칸 및 전송 버튼 정의
+	// JPanel + JTextField + JButton
 	private void setSouth() {
 		panelSouth = new JPanel();
 		textField = new JTextField(18);
+		// textField에서 Enter 클릭하면 ActionEvent 발생
 		textField.addActionListener(this);
 		panelSouth.add(textField);
 
 		button1 = new JButton("보내기");
+		// button1을 클릭하면 ActionEvent 발생
 		button1.addActionListener(this);
 
 		panelSouth.add(button1);
@@ -98,7 +105,7 @@ public class SwingClientApp extends JFrame implements ActionListener {
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// ActionListener를 통해 ActionEvent가 발생한 source가 button1 또는 textfield 인가요?
+		// ActionListener를 통해 ActionEvent가 발생한 source가 button1 또는 textField 인가요?
 		Object obj = e.getSource();
 		if (obj == button1 || obj == textField) {
 			sendMessage();

@@ -17,7 +17,7 @@ public class ServerThread extends Thread {
     private Socket clientSocket;
     private BufferedReader reader;
     private PrintWriter writer;
-    final String CLIENT_IP;
+    private final String CLIENT_IP;
 
     public ServerThread(Socket clientSocket) {
         this.clientSocket = clientSocket;
@@ -53,9 +53,11 @@ public class ServerThread extends Thread {
             while (true) {
                 // 클라이언트 접속 시 "OOOO님께서 입장하셨습니다." 출력
                 try {
-                    broadcastMsg(ChatServer.clientJoined(CLIENT_IP));
+                    if (clientSocket != null) {
+                        broadcastMsg(ChatServer.clientJoined(CLIENT_IP));
+                    }
                 } catch (ConcurrentModificationException e) {
-                    System.out.println("");
+                    break;
                 }
 
                 // 클라이언트로부터 받은 메시지가 null 아니라면 이를 서버에서 처리하고
@@ -90,8 +92,7 @@ public class ServerThread extends Thread {
 
     private void broadcastMsg(Chat chat) {
         if (chat != null)
-            for (ServerThread thread : ChatServer.getThreadList()) {
+            for (ServerThread thread : ChatServer.getThreadList())
                 thread.writer.println(chat.toString());
-            }
     }
 }

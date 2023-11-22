@@ -12,16 +12,9 @@ public class Chat {
     public String content = "";
 
     // 생성자 → 현재 시각의 UNIX Timestamp를 입력
-    /* UNIX 시간: 1970-01-01 00:00 (UTC)부터 지금까지 몇 초 지났니? */
+    /* UNIX 시간: 1970-01-01 00:00 (UTC)부터 지금까지 몇 초 지났나요? */
     public Chat() {
         timestamp = now.getTime();
-    }
-
-    // 연-월-일 시:분:초 형식으로 반환
-    public static String dateTime(long stamp) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String dateTime = sdf.format(new Date(stamp));
-        return dateTime;
     }
 
     // (시:분) 형식으로 반환

@@ -4,11 +4,14 @@ import java.util.Arrays;
 import java.util.List;
 
 public class User {
+    /* 이름 구성: 색상 2자 + 농산물 2자, List에서 무작위 추출하여 결합할 것 */
     static List<String> nameList1 = Arrays.asList("빨강", "주황", "노랑", "초록", "연두", "파랑", "보라", "분홍", "황금", "검정", "하늘",
             "하양");
     static List<String> nameList2 = Arrays.asList("사과", "자두", "오이", "피망", "배추", "상추", "가지", "감자", "당근", "참깨", "보리",
             "감귤");
+    // userMap의 Key: IP주소        
     public final String ipAddr;
+    // userMap의 Value: 사용자 이름
     public String userName;
 
     /*
@@ -19,7 +22,7 @@ public class User {
     public User(String ipAddr) {
         this.ipAddr = ipAddr;
         if (this.ipAddr.equals(Constants.SERVER_ADDR))
-            this.userName = "관리자";
+            this.userName = Constants.ADMIN_NAME;
         else
             this.userName = nameList1.get((int) (Math.random() * 12)) + nameList2.get((int) (Math.random() * 12));
     }
