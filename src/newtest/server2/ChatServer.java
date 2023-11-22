@@ -68,7 +68,8 @@ public class ChatServer {
  	static void addUserCsv(User user) {
 
  		try (FileWriter fw = new FileWriter("User.csv", true)) {
- 			fw.write("\n" + user.ipAddr + "," + user.userName);
+ 			if(user.userName != Constants.ADMIN_NAME)
+ 				fw.write("\n" + user.ipAddr + "," + user.userName);
  		} catch (IOException e) {
  			e.printStackTrace();
  		}
