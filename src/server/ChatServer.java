@@ -51,6 +51,7 @@ public class ChatServer {
     // chatMap에서 <K, V> 1쌍 추가
     static void addChat(Chat chat) {
         chatMap.put(chat.timestamp, chat.content);
+        CSVReader.addChatCsv(chat);
     }
 
     // addChat() 메서드 오버로딩 → CSV 파일 불러오기
