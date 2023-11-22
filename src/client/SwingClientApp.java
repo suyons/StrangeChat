@@ -115,7 +115,19 @@ public class SwingClientApp extends JFrame implements ActionListener {
 	private void sendMessage() {
 		// textField에 작성된 메시지 전송하기
 		String content = textField.getText();
-		// while ((content = textField.getText()).trim().isEmpty()) { }
+		if (content.equals("/종료")) {
+			textArea.append("종료 명령어를 입력했습니다.\n");
+			try {
+				writer.close();
+				reader.close();
+				socket.close();
+				userInput.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			System.exit(0);
+			return;
+		}
 		if (!content.equals(""))
 			writer.println(content);
 
@@ -173,5 +185,4 @@ public class SwingClientApp extends JFrame implements ActionListener {
 		SwingClientApp swingClient = new SwingClientApp("StrangeChat", 400, 400);
 		swingClient.setSocket();
 	}
-
 }
