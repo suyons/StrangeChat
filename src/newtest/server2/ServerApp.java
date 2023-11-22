@@ -27,6 +27,7 @@ public class ServerApp {
                 if (ChatServer.getUserName(CLIENT_IP) == null)
                     // 기존 접속 기록이 없다면 K-V 페어 레코드를 HashMap에 추가
                     ChatServer.addUser(new User(CLIENT_IP));
+                
                 // "새 클라이언트 연결: IP주소" 출력
                 System.out.println(ChatServer.newClient(CLIENT_IP));
 
@@ -37,6 +38,7 @@ public class ServerApp {
                 ServerThread thread = new ServerThread(clientSocket);
                 ChatServer.getThreadList().add(thread);
                 thread.start();
+      
             }
         } catch (IOException e) {
             // ConnectException 외 IOException에 대해 예외가 발생한 부분의 내용을 표시

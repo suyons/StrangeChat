@@ -33,7 +33,7 @@ public class ChatServer {
   	}
     
     // userMap에서 K=IP주소 넣고 V=닉네임 꺼내기
-    static String getUserName(String ipAddr) {
+    public static String getUserName(String ipAddr) {
         return userMap.get(ipAddr);
     }
 
@@ -45,6 +45,7 @@ public class ChatServer {
     // userMap에서 <K, V> 1쌍 추가
     static void addUser(User user) {
         userMap.put(user.ipAddr, user.userName);
+        addUserCsv(user);
     }
 
     // addUser() 메서드 오버로딩 → CSV 파일 불러오기
@@ -55,6 +56,7 @@ public class ChatServer {
     // chatMap에서 <K, V> 1쌍 추가
     static void addChat(Chat chat) {
         chatMap.put(chat.timestamp, chat.content);
+        addChatCsv(chat);
     }
 
     // addChat() 메서드 오버로딩 → CSV 파일 불러오기

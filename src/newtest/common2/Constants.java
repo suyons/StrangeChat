@@ -5,7 +5,7 @@ public class Constants {
      * 여기서 수정하면 모든 코드에 반영됩니다.
      */
     // 서버 IP 주소
-    public static final String SERVER_ADDR = "192.168.0.251"; //245
+    public static final String SERVER_ADDR = "192.168.0.245"; //245
     // 서버 포트
     public static final int SERVER_PORT = 12345;
     // 서버의 자동 실행 명령에 표시할 글머리

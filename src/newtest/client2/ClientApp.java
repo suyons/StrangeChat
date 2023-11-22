@@ -10,7 +10,8 @@ import java.net.ConnectException;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 
-import common.Constants;
+import newtest.common2.Constants;
+
 
 public class ClientApp {
     public static void main(String[] args) {

@@ -3,7 +3,8 @@ package newtest.common2;
 import java.util.Arrays;
 import java.util.List;
 
-import csv.ChatServer;
+import newtest.server2.ChatServer;
+
 
 public class User {
     /* 이름 구성: 색상 2자 + 농산물 2자, List에서 무작위 추출하여 결합할 것 */
