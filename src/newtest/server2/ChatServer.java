@@ -28,7 +28,7 @@ public class ChatServer {
   		while (ir.hasNext()) {
   			Long timestamp = ir.next();
   			String content = chatMap.get(timestamp);
-  			System.out.println(timestamp +" "+ content);
+  			System.out.println(content);
   		}
   	}
     
@@ -45,7 +45,7 @@ public class ChatServer {
     // userMap에서 <K, V> 1쌍 추가
     static void addUser(User user) {
         userMap.put(user.ipAddr, user.userName);
-        addUserCsv(user);
+        CSVReader.addUserCsv(user);
     }
 
     // addUser() 메서드 오버로딩 → CSV 파일 불러오기
@@ -56,7 +56,7 @@ public class ChatServer {
     // chatMap에서 <K, V> 1쌍 추가
     static void addChat(Chat chat) {
         chatMap.put(chat.timestamp, chat.content);
-        addChatCsv(chat);
+        CSVReader.addChatCsv(chat);
     }
 
     // addChat() 메서드 오버로딩 → CSV 파일 불러오기
@@ -64,25 +64,25 @@ public class ChatServer {
         chatMap.put(timestamp, content);
     }
 
-    // User.csv 파일에 IP주소, 닉네임 기록
- 	static void addUserCsv(User user) {
-
- 		try (FileWriter fw = new FileWriter("User.csv", true)) {
- 			if(user.userName != Constants.ADMIN_NAME)
- 				fw.write("\n" + user.ipAddr + "," + user.userName);
- 		} catch (IOException e) {
- 			e.printStackTrace();
- 		}
- 	}
-
- 	// Chat.csv 파일에 시간, 대화내용, 닉네임 입력
- 	public static void addChatCsv(Chat chat) {
- 		try (FileWriter fw = new FileWriter("Chat.csv", true)) {
- 			fw.write("\n" + chat.timestamp + "," + '"' + chat.content + '"');
- 		} catch (IOException e) {
- 			System.out.println("Chat.csv파일을 찾을 수 없습니다.");
- 		}
- 	}
+//    // User.csv 파일에 IP주소, 닉네임 기록
+// 	static void addUserCsv(User user) {
+//
+// 		try (FileWriter fw = new FileWriter("User.csv", true)) {
+// 			if(user.userName != Constants.ADMIN_NAME)
+// 				fw.write("\n" + user.ipAddr + "," + user.userName);
+// 		} catch (IOException e) {
+// 			e.printStackTrace();
+// 		}
+// 	}
+//
+// 	// Chat.csv 파일에 시간, 대화내용, 닉네임 입력
+// 	public static void addChatCsv(Chat chat) {
+// 		try (FileWriter fw = new FileWriter("Chat.csv", true)) {
+// 			fw.write("\n" + chat.timestamp + "," + '"' + chat.content + '"');
+// 		} catch (IOException e) {
+// 			System.out.println("Chat.csv파일을 찾을 수 없습니다.");
+// 		}
+// 	}
     
     /* ServerSocket 생성 이후 클라이언트 대기 메시지 출력
      * [시스템] 서버에서만 보입니다. 클라이언트로 전송하지 않습니다.

@@ -48,12 +48,16 @@ public class ServerThread extends Thread {
                             new OutputStreamWriter(
                                     clientSocket.getOutputStream(), StandardCharsets.UTF_8)),
                     true);
-
+            
+            
+            
+            
             // Server continuously listens for messages from the client
             while (true) {
                 // 클라이언트 접속 시 "OOOO님께서 입장하셨습니다." 출력
                 try {
                     if (clientSocket != null) {
+//                    	broadcastMsg(ChatServer.printChatmap());
                         broadcastMsg(ChatServer.clientJoined(CLIENT_IP));
                     }
                 } catch (ConcurrentModificationException e) {

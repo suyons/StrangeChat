@@ -2,10 +2,37 @@ package newtest.server2;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import newtest.common2.*;
 
-public class CSVReader {
+public class CSVReader { 
+	
+		//입력받은 값 csv 파일에 저장하기
+		
+	   // User.csv 파일에 IP주소, 닉네임 기록
+	 	static void addUserCsv(User user) {
+
+	 		try (FileWriter fw = new FileWriter("User.csv", true)) {
+	 			if(user.userName != Constants.ADMIN_NAME)
+	 				fw.write("\n" + user.ipAddr + "," + user.userName);
+	 		} catch (IOException e) {
+	 			e.printStackTrace();
+	 		}
+	 	}
+
+	 	// Chat.csv 파일에 시간, 대화내용 입력
+	 	public static void addChatCsv(Chat chat) {
+	 		try (FileWriter fw = new FileWriter("Chat.csv", true)) {
+	 			fw.write("\n" + chat.timestamp + "," + '"' + chat.content + '"');
+	 		} catch (IOException e) {
+	 			System.out.println("Chat.csv파일을 찾을 수 없습니다.");
+	 		}
+	 	}
+	
+	
+	 	
+	//csv파일 내용을 해쉬맵에 저장한다. 
 
 	// Chat.csv 파일 해쉬맵에 저장하기 -> 파일 불러와서 시간, 대화내용을 해쉬맵에 저장한다.
 	public void saveChatCsv() {
@@ -27,10 +54,6 @@ public class CSVReader {
 			e.printStackTrace();
 		}
 	}
-	
-
-	
-
 	
 	// User.csv 파일 해쉬맵에 저장하기 -> 파일 불러와서 아이피주소, 닉네임을 해쉬맵에 저장한다.
 	public void saveUserCsv() {

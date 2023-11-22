@@ -28,7 +28,7 @@ public class User {
         if (this.ipAddr.equals(Constants.SERVER_ADDR)) {
             this.userName = Constants.ADMIN_NAME;
         }
-        else if(ChatServer.getUserName(ipAddr)!= null) {
+        else if(ChatServer.getUserName(ipAddr)!= null) { 
         	this.userName = ChatServer.getUserName(ipAddr);
         } else
         	this.userName = nameList1.get((int) (Math.random() * 12)) + nameList2.get((int) (Math.random() * 12));
