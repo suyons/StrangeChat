@@ -2,6 +2,7 @@ package client;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.ComponentOrientation;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -22,26 +23,29 @@ import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.border.LineBorder;
 
-import common.*;
+import common.Constants;
 
 public class SwingClientApp extends JFrame implements ActionListener {
 	// 폼 요소 정의
 	private JPanel panelCenter;
+	private JPanel panelCenter2;	//[수진]패널변수 추가
 	private JPanel panelSouth;
 
-	// JTextField: 단일 행 입출력 가능 → 신규 대화 입력 영역
+	// TextField: 단일 행 입출력 가능 → 신규 대화 입력 영역
 	private JTextField textField;
 	private JButton button1;
 
-	// JTextArea: 여러 행 입출력 가능 → 대화 내용 보기 영역
+	// TextArea: 여러 행 입출력 가능 → 대화 내용 보기 영역
 	private JTextArea textArea;
-	// JScrollPane: 엘리베이터 통로
+	private JTextArea textArea2;		//[수진]텍스트에어리어 변수 추가
 	private JScrollPane scrollPane;
-	// JScrollBar: 엘리베이터
+	private JScrollPane scrollPane2;	//[수진]스크롤패널 변수 추가
 	private JScrollBar scrollBar;
+	
+	private int scrollPos = 0;			//[수진]스크롤 포지션 추가
 
-	// Socket 및 입출력 스트림 정의
 	private Socket socket;
 	private BufferedReader reader;
 	private PrintWriter writer;
@@ -50,47 +54,79 @@ public class SwingClientApp extends JFrame implements ActionListener {
 	// 생성자를 통한 폼 생성
 	public SwingClientApp(String title, int width, int height) {
 		setTitle(title);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setLocation(800, 200);
 		setSize(width, height);
+		setLocation(800, 200);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLayout(new BorderLayout());
 
 		setCenter();
+		setCenter2();						//[수진]두번째 패널 메서드 추가
 		setSouth();
 		setVisible(true);
 		textField.requestFocus();
+		setResizable(false);				//[수진]임의로 창 조절 불가
+		
+
 	}
 
-	// 상단의 대화내용 표시 텍스트 영역 정의
-	// JPanel + JTextArea + JScrollPane
+	private void setCenter2() {
+		panelCenter2 = new JPanel();
+		panelCenter2.setBackground(Color.WHITE);	//[수진]배경을 화이트로 설정해 텍스트에어리어와 구분이안되도록
+//		panelCenter2.setLayout(new BorderLayout());	//[수진]보더레이아웃끄고
+
+		textArea2 = new JTextArea(19, 15);			//[수진]직접 크기지정
+		textArea2.setLineWrap(true);
+		textArea2.setEditable(false);
+		scrollPane2 = new JScrollPane(textArea2,
+				JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane2.setBorder(new LineBorder(Color.WHITE));	//[수진] 텍스트에어리어 테두리 흰색
+		scrollBar = scrollPane.getVerticalScrollBar();
+		textArea2.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);	//[수진] 텍스트에어리어 오른쪽정렬
+
+		scrollPane2.getVerticalScrollBar().addAdjustmentListener(e -> {		//[수진]스크롤바2가 스크롤바1의 포지션 받아옴
+			scrollPos = scrollPane2.getVerticalScrollBar().getValue();
+			scrollPane.getVerticalScrollBar().setValue(scrollPos);
+	      });
+		
+		panelCenter.add(scrollPane2);
+		add(panelCenter, BorderLayout.CENTER);
+		
+		
+	}
+
+	// 대화내용 표시하는 텍스트 영역 정의
 	private void setCenter() {
 		panelCenter = new JPanel();
-		panelCenter.setBackground(Color.BLUE);
-		panelCenter.setLayout(new BorderLayout());
+		panelCenter.setBackground(Color.WHITE);	//[수진]배경을 화이트로 설정해 텍스트에어리어와 구분이안되도록
+//		panelCenter.setLayout(new BorderLayout());	//[수진]보더레이아웃끄고
 
-		textArea = new JTextArea(7, 18);
+		textArea = new JTextArea(19, 15);			//[수진]직접 크기지정
 		textArea.setLineWrap(true);
 		textArea.setEditable(false);
 		scrollPane = new JScrollPane(textArea,
-				JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+				JScrollPane.VERTICAL_SCROLLBAR_NEVER,
 				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		scrollBar = scrollPane.getVerticalScrollBar();
+		scrollPane.setBorder(new LineBorder(Color.WHITE));	//[수진] 텍스트에어리어 테두리 흰색
+		scrollBar = scrollPane.getVerticalScrollBar();		
 
+		scrollPane.getVerticalScrollBar().addAdjustmentListener(e -> {		//[수진]스크롤바1이 스크롤바2의 포지션 받아옴
+			scrollPos = scrollPane.getVerticalScrollBar().getValue();
+			scrollPane2.getVerticalScrollBar().setValue(scrollPos);
+	      });
+		
 		panelCenter.add(scrollPane);
 		add(panelCenter, BorderLayout.CENTER);
 	}
 
-	// 하단의 대화 입력칸 및 전송 버튼 정의
-	// JPanel + JTextField + JButton
+	// 전송 버튼 정의
 	private void setSouth() {
 		panelSouth = new JPanel();
 		textField = new JTextField(18);
-		// textField에서 Enter 클릭하면 ActionEvent 발생
 		textField.addActionListener(this);
 		panelSouth.add(textField);
 
 		button1 = new JButton("보내기");
-		// button1을 클릭하면 ActionEvent 발생
 		button1.addActionListener(this);
 
 		panelSouth.add(button1);
@@ -105,7 +141,7 @@ public class SwingClientApp extends JFrame implements ActionListener {
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// ActionListener를 통해 ActionEvent가 발생한 source가 button1 또는 textField 인가요?
+		// ActionListener를 통해 ActionEvent가 발생한 source가 button1 또는 textfield 인가요?
 		Object obj = e.getSource();
 		if (obj == button1 || obj == textField) {
 			sendMessage();
@@ -118,6 +154,7 @@ public class SwingClientApp extends JFrame implements ActionListener {
 		// while ((content = textField.getText()).trim().isEmpty()) { }
 		if (!content.equals(""))
 			writer.println(content);
+			
 
 		// 메시지를 보내고 textField 내용 지우기
 		textField.setText("");
@@ -145,6 +182,7 @@ public class SwingClientApp extends JFrame implements ActionListener {
 			while (true) {
 				try {
 					textArea.append(reader.readLine() + "\n");
+					
 				} catch (SocketException e) {
 					textArea.append(Constants.SYSTEM_NAME + "서버와의 연결에 실패했습니다.\n");
 				}
