@@ -22,7 +22,7 @@ public class ServerApp {
             while (true) {
                 // serverSocket.accept(): 연결된 클라이언트의 Socket형 객체를 반환
                 Socket clientSocket = serverSocket.accept();
-                final String CLIENT_IP = clientSocket.getInetAddress().getHostAddress();
+                final String CLIENT_IP = clientSocket.getInetAddress().getHostAddress(); //#
                 // V HashMap.get(K): HashMap에서 K에 해당하는 V가 없다면 null을 반환
                 if (ChatServer.getUserName(CLIENT_IP) == null)
                     // 기존 접속 기록이 없다면 K-V 페어 레코드를 HashMap에 추가

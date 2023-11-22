@@ -18,8 +18,8 @@ public class CSVReader {
 					continue;
 				
 				// putChatmap() : 타임스탬프, 대화내용 매개변수로 받아 csv 파일 -> hashmap에 저장
-//				ChatServer.addChat(Long.valueOf(data[0]), data[1]); // 한줄을 기준으로 데이터가 두개이기 때문
-				System.out.println(data[0]);
+				ChatServer.addChat(Long.valueOf(data[0]), data[1]); // 한줄을 기준으로 데이터가 두개이기 때문
+//				System.out.println(data[0]);
 			}
 			fr.close();
 		} catch (IOException e) {

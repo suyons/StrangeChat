@@ -47,6 +47,7 @@ public class ClientApp {
         } catch (ConnectException e) {
             // 서버에 정상적으로 연결되지 않았을 때 ConnectException 예외 발생
             System.out.println(Constants.SYSTEM_NAME + "서버를 찾지 못했습니다.");
+            e.printStackTrace();
         } catch (IOException e) {
             // ConnectException 외 IOException에 대해 예외가 발생한 부분의 내용을 표시
             e.printStackTrace();
