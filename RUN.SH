@@ -1,0 +1,1 @@
+java -cp ServerApp.jar server.ServerApp
