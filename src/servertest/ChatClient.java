@@ -15,7 +15,7 @@ public class ChatClient {
 	    }
 
 	    public void sendMessage(String message) {
-	        out.println(message);
+	        out.println(message);	
 	    }
 
 	    public void run() {
