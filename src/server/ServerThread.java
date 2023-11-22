@@ -14,32 +14,34 @@ import java.util.Iterator;
 
 import common.*;
 
+// Thread implements Runnable → 멀티스레드 구현 가능
 public class ServerThread extends Thread {
+    // 소켓, 네트워크 입출력 스트림 정의
     private Socket clientSocket;
     private BufferedReader reader;
     private PrintWriter writer;
+
+    // 클라이언트의 IP 주소
     private final String CLIENT_IP;
 
+    // 생성자 재정의: 상수 String CLIENT_IP에 클라이언트 IP주소를 대입
     public ServerThread(Socket clientSocket) {
         this.clientSocket = clientSocket;
         CLIENT_IP = clientSocket.getInetAddress().getHostAddress();
     }
 
+    // 멀티스레드로 실행할 내용 = 서버 동작의 핵심부
     @Override
     public void run() {
         try {
             /*
-             * ■ OutputStream on Network
-             * (1) Server Side:
-             * ● The server uses the input stream (getInputStream())
-             * of the client's socket to read data sent by the client.
-             * ● The server uses the output stream (getOutputStream())
-             * of the client's socket to send data to the client.
-             * (2) Client Side:
-             * ● Conversely, the client uses the input stream
-             * of the server's socket to read data sent by the server.
-             * ● The client uses the output stream of its own socket
-             * to send data to the server.
+             * ■ 네트워크에서의 입력(reader) / 출력(writer) 스트림
+             * (1) 서버 측
+             * ● 클라이언트 소켓의 입력 스트림: 클라이언트 → 서버
+             * ● 클라이언트 소켓의 출력 스트림: 서버 → 클라이언트
+             * (2) 클라이언트 측
+             * ● 서버 소켓의 입력 스트림: 서버 → 클라이언트
+             * ● 서버 소켓의 출력 스트림: 클라이언트 → 서버
              */
             reader = new BufferedReader(
                     new InputStreamReader(
@@ -50,9 +52,10 @@ public class ServerThread extends Thread {
                                     clientSocket.getOutputStream(), StandardCharsets.UTF_8)),
                     true);
 
+            // 클라이언트가 새로 접속할 때 이전 대화내용을 전송
             showPreviousMsg();
 
-            // Server continuously listens for messages from the client
+            // 서버 ↔ 클라이언트 양방향 메시지 교환을 지속 수행
             while (true) {
                 // 클라이언트 접속 시 "OOOO님께서 입장하셨습니다." 출력
                 try {
@@ -93,6 +96,7 @@ public class ServerThread extends Thread {
         }
     }
 
+    // 매개변수로 넣은 chat의 내용을 모든 클라이언트에게 전송
     private void broadcastMsg(Chat chat) {
         if (chat != null)
             for (ServerThread thread : ChatServer.getThreadList())

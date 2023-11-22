@@ -160,7 +160,7 @@ public class SwingClientApp extends JFrame implements ActionListener {
 				} catch (SocketException e) {
 					textArea.append(Constants.SYSTEM_NAME + "서버와의 연결에 실패했습니다.\n");
 				}
-
+				// 최신의 채팅을 볼 수 있도록 스크롤바의 위치를 가장 아래로 옮기기
 				scrollBar.setValue(scrollBar.getMaximum());
 			}
 		} catch (ConnectException e) {
@@ -182,7 +182,8 @@ public class SwingClientApp extends JFrame implements ActionListener {
 	}
 
 	public static void main(String[] args) {
-		SwingClientApp swingClient = new SwingClientApp("StrangeChat", 400, 400);
+		SwingClientApp swingClient = new SwingClientApp(
+				"StrangeChat", 400, 400);
 		swingClient.setSocket();
 	}
 }
