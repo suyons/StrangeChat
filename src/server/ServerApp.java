@@ -9,6 +9,7 @@ import common.*;
 public class ServerApp {
     public static void main(String[] args) {
         // IP주소와 포트를 지정하여 ServerSocket형 객체 생성
+    	// 테스트 주석 추가
         try (ServerSocket serverSocket = new ServerSocket(Constants.SERVER_PORT)) {
             /* Part I: 서버 내부에서의 동작, 클라이언트는 볼 수 없음 */
             System.out.println(ChatServer.waiting());
