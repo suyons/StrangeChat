@@ -152,8 +152,8 @@ public class SwingClientApp extends JFrame implements ActionListener {
 					new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
 			writer = new PrintWriter(new BufferedWriter(
 					new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8)), true);
-			userInput = new BufferedReader(
-					new InputStreamReader(System.in, StandardCharsets.UTF_8));
+			// userInput = new BufferedReader(
+			// 		new InputStreamReader(System.in, StandardCharsets.UTF_8));
 			while (true) {
 				try {
 					textArea.append(reader.readLine() + "\n");
@@ -172,7 +172,7 @@ public class SwingClientApp extends JFrame implements ActionListener {
 				writer.close();
 				reader.close();
 				socket.close();
-				userInput.close();
+				// userInput.close();
 			} catch (NullPointerException e) {
 				textArea.append("");
 			} catch (IOException e) {
