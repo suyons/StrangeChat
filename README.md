@@ -39,6 +39,21 @@
 **UML Class Diagram**
 ```mermaid
 classDiagram
+Chat <.. ServerThread
+Chat <.. ChatServer
+Chat <.. CSVReader
+User <.. ServerThread
+User <.. ChatServer
+User <.. CSVReader
+Constants <.. SwingClientApp
+Constants <.. User
+Constants <.. ChatServer
+Constants <.. CSVReader
+Constants <.. ServerApp
+CSVReader <.. ChatServer
+CSVReader <.. ServerApp
+ServerApp ..> ChatServer
+ServerApp ..> ServerThread
 namespace common {
     class Chat {
         +long timestamp
@@ -47,13 +62,11 @@ namespace common {
         +String hourMinute(long timestamp)
         +String toString()            
     }
-
     class User {
         +String ipAddr
         +String userName
         +User(String ipAddr)
     }
-
     class Constants {
         +String SERVER_ADDR$
         +int SERVER_PORT$
@@ -61,7 +74,6 @@ namespace common {
         +String ADMIN_NAME$
     }
 }
-
 namespace client {
     class SwingClientApp {
         -JPanel panelCenter
@@ -84,7 +96,6 @@ namespace client {
         +void main()$
     }
 }
-
 namespace server {
     class ChatServer {
         -ArrayList~ServerThread~ threadList$
@@ -104,7 +115,6 @@ namespace server {
         ~Chat clientsChat(String ipAddr, String content)$
         ~Chat clientLeft(String ipAddr)$
     }
-
     class ServerThread {
         -Socket clientSocket;
         -BufferedReader reader;
@@ -115,37 +125,16 @@ namespace server {
         -void broadcastMsg(Chat chat)
         -void showPreviousMsg()
     }
-
     class CSVReader {
         +void saveChatCsv()
         +void saveUserCsv()
         ~void addUserCsv(User user)$
         ~void addChatCsv(Chat chat)$
     }
-
     class ServerApp {
         +void main()$
     }
 }
-Chat <.. ServerThread
-Chat <.. ChatServer
-Chat <.. CSVReader
-
-User <.. ServerThread
-User <.. ChatServer
-User <.. CSVReader
-
-Constants <.. SwingClientApp
-Constants <.. User
-Constants <.. ChatServer
-Constants <.. CSVReader
-Constants <.. ServerApp
-
-CSVReader <.. ChatServer
-CSVReader <.. ServerApp
-
-ServerApp ..> ChatServer
-ServerApp ..> ServerThread
 ```
 
 ## 04 구현 기능
