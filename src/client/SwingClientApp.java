@@ -45,7 +45,7 @@ public class SwingClientApp extends JFrame implements ActionListener {
 	private Socket socket;
 	private BufferedReader reader;
 	private PrintWriter writer;
-	private BufferedReader userInput;
+	// private BufferedReader userInput;
 
 	// 생성자를 통한 폼 생성
 	public SwingClientApp(String title, int width, int height) {
@@ -121,7 +121,7 @@ public class SwingClientApp extends JFrame implements ActionListener {
 				writer.close();
 				reader.close();
 				socket.close();
-				userInput.close();
+				// userInput.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

@@ -19,7 +19,7 @@ public class CSVReader {
 					continue;
 
 				// putChatmap() : 타임스탬프, 대화내용 매개변수로 받아 csv 파일 -> hashmap에 저장
-//				System.out.println(data[0] + "," + data[1]);
+				// System.out.println(data[0] + "," + data[1]);
 				ChatServer.addChat(Long.parseLong(data[0]), data[1]); // 한줄을 기준으로 데이터가 두개이기 때문
 				// System.out.println(data[0]);
 			}
@@ -50,21 +50,21 @@ public class CSVReader {
 	}
 
 	// User.csv 파일에 IP주소, 닉네임 기록
- 	static void addUserCsv(User user) {
- 		try (FileWriter fw = new FileWriter("User.csv", true)) {
- 			if(user.userName != Constants.ADMIN_NAME)
- 				fw.write("\n" + user.ipAddr + "," + user.userName);
- 		} catch (IOException e) {
- 			e.printStackTrace();
- 		}
- 	}
+	static void addUserCsv(User user) {
+		try (FileWriter fw = new FileWriter("User.csv", true)) {
+			if (user.userName != Constants.ADMIN_NAME)
+				fw.write("\n" + user.ipAddr + "," + user.userName);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
- 	// Chat.csv 파일에 시간, 대화내용, 닉네임 입력
- 	public static void addChatCsv(Chat chat) {
- 		try (FileWriter fw = new FileWriter("Chat.csv", true)) {
- 			fw.write("\n" + chat.timestamp + "," + '"' + chat.content + '"');
- 		} catch (IOException e) {
- 			System.out.println("Chat.csv 파일을 찾을 수 없습니다.");
- 		}
- 	}
+	// Chat.csv 파일에 시간, 대화내용, 닉네임 입력
+	public static void addChatCsv(Chat chat) {
+		try (FileWriter fw = new FileWriter("Chat.csv", true)) {
+			fw.write("\n" + chat.timestamp + "," + '"' + chat.content + '"');
+		} catch (IOException e) {
+			System.out.println("Chat.csv 파일을 찾을 수 없습니다.");
+		}
+	}
 }
