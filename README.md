@@ -5,8 +5,8 @@
 2. 진행 기간
    * 시작: 2023-11-17
    * 종료: 2023-11-22
-3. GitHub Repository
-   * https://github.com/suyons/StrangeChat``
+3. Blog
+   * https://velog.io/@syoungs/project-1
 4. 참여 인원
 
     | 이름 | 프로필 | 역할 |
@@ -40,14 +40,11 @@
 ![](https://mermaid.ink/img/pako:eNqNVm1v2jAQ_itW1A9Uo0j7SqdJFJhGRRgitNMmpMpNDrCa2JHtwKqq_Pb5JQk2SbrlQ3y55-5yOd898VsQswSCYRCnWIgJwTuOsw0d77FEXwYDFAE_AF_vOeDEUWvBQq4yelwpM617EMBb_Gu1639Wnv3HjAqJqRQ2yJHQ3TglQOUozy9R7X-p8_Lzkc6XGHMbv7JpxvIQx6UW0WDw1XPxEb8eFGcgchwDilmWMYreNhSpy2yGiVJp9PUpZXSHJFE-Eme5A0SSqwqpIFSqGjmADtG7blruWcFDQgsJPT9oi61kVuhdI-eydu9uvmYj35oBSD5KEt7UF8p-oSrgIDpEz3O7bnnReeNa3hZNV4_T1dNoMlldOSihsoKWP1brqxbHX9F6Gj4tRuG0BR1NwtnCBVVG794Omv70d9BvXDfbm_slppCiXN_HCgfeAUaskHsXW8Mf-Y1AmiBZSS58V0ipOunZLJ8vHUeq8YyfFlwwijlLU_1eJGqxaXCHeYkryYEjFr-ARMIsjv6u2G6BQ1JODS9Hr8aXqrjyJyfq-9HRLA54YCRBAqStj9vHNWSq43W4QXAsCaNL4FvGM0h6I_M8PegdgpY4NAlBCLwDL1RVyx1IK_loXU-FV3IzFZOkrkoTyjBRITv6SRimaDJC5OnNR4w4x69zIuTJpZcTkmbVgNPQN9-x2Ic4P9nG7iO7nsw4Kn2b6Zy5hrHKwjc8dWWgK1MnUX-qO1fK4qHkgYvBd-OfjXUJxpbnRG_uc5frMVMdgyXjJneTSKXx0jjZdkkSwzyGwXQduk28HKua1FTW6mdI2JC5rly3ic_EdeyS1T0_E-2IiTS83EAoHC3rfFBSm5CxumeEqiH5L1thUm2vQmem1nUO246EPHZ3O8hr85JjbDD7cPsvqrn9kGtctExsPJ9NF-un2dJtVSejXksWjcHmBW2y1TNnOImxkKHYOe3QIKM9Oy45HAgrhLZs_QHWx5C3Bt3gA5gZEYcWLlKg7uIL0OtwjX08B1X4Rku3bOPFb6-D94J-kAFX6kSdRI35JpB7UEeDYKjEBPOXTWDtcKHOI680DoZbnAroB0WeYAnlyfVCO02IGvhgKHmhdGCewvK8q5d-oH6xvxmr_N7_AqGhf3c?type=png)
 
 ## 04 구현 기능
-### 1. 클라이언트 GUI
+### 클라이언트 GUI
 ![](https://raw.githubusercontent.com/suyons/StrangeChat/Main/image_icon/client_screenshot.png)
 
-### 2. 서버 CSV 파일 입출력
+### 서버 CSV 파일 입출력
 ![](https://raw.githubusercontent.com/suyons/StrangeChat/Main/image_icon/screenshot_server_csv.png)
-
-## 05 돌아보며
-### 1. 아이디어 기획 과정
 
 <!-- Mermaid class diagram codes below -->
 <!-- ```mermaid
