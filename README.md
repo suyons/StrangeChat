@@ -3,10 +3,10 @@
 ## 01 개요
 1. 로컬 네트워크 내에서 이용 가능한 채팅 앱
 2. 진행 기간
-   * 시작: 2023-12-17
-   * 종료: 2023-12-22
+   * 시작: 2023-11-17
+   * 종료: 2023-11-22
 3. GitHub Repository
-   * https://github.com/suyons/StrangeChat
+   * https://github.com/suyons/StrangeChat``
 4. 참여 인원
 
     | 이름 | 프로필 | 역할 |
@@ -39,122 +39,121 @@
 **UML Class Diagram**
 ```mermaid
 classDiagram
-    namespace common {
-        class Chat {
-            +long timestamp
-            +String content
-            +Chat()
-            +String hourMinute(long timestamp)
-            +String toString()            
-        }
-
-        class User {
-            +String ipAddr
-            +String userName
-            +User(String ipAddr)
-        }
-
-        class Constants {
-            +String SERVER_ADDR$
-            +int SERVER_PORT$
-            +String SYSTEM_NAME$
-            +String ADMIN_NAME$
-        }
+namespace common {
+    class Chat {
+        +long timestamp
+        +String content
+        +Chat()
+        +String hourMinute(long timestamp)
+        +String toString()            
     }
 
-    namespace client {
-        class SwingClientApp {
-            -JPanel panelCenter
-            -JPanel panelSouth
-            -JTextField textField
-            -JButton button1
-            -JTextArea textArea
-            -JScrollPane scrollPane
-            -JScrollBar scrollBar
-            -Socket socket
-            -BufferedReader reader
-            -PrintWriter writer
-            -void setCenter()
-            -void setSouth()
-            +void actionPerformed(ActionEvent e)
-            -void sendMessage()
-            +JButton getButton1()
-            +JTextArea getTextArea()
-            +void setSocket()
-            +void main()$
-        }
+    class User {
+        +String ipAddr
+        +String userName
+        +User(String ipAddr)
     }
 
-    namespace server {
-        class ChatServer {
-            -ArrayList~ServerThread~ threadList$
-            -HashMap~String, String~ userMap$
-            -HashMap~Long, String~ chatMap$
-            ~ArrayList~ServerThread~ getThreadList()$
-            +String getUserName(String ipAddr)$
-            ~String getChatContents(Long timestamp)$
-            ~Iterator~Long~ getIterator()$
-            ~void addUser(User user)$
-            ~void addUser(String ipAddr, String userName)$
-            ~void addChat(Chat chat)$
-            ~void addChat(long timestamp, String content)$
-            ~Chat waiting()$
-            ~Chat newClient(String ipAddr)$
-            ~Chat clientJoined(String ipAddr)$
-            ~Chat clientsChat(String ipAddr, String content)$
-            ~Chat clientLeft(String ipAddr)$
-        }
-
-        class ServerThread {
-            -Socket clientSocket;
-            -BufferedReader reader;
-            -PrintWriter writer;
-            -String CLIENT_IP
-            +ServerThread(Socket clientSocket)
-            +void run()
-            -void broadcastMsg(Chat chat)
-            -void showPreviousMsg()
-        }
-
-        class CSVReader {
-            +void saveChatCsv()
-            +void saveUserCsv()
-            ~void addUserCsv(User user)$
-            ~void addChatCsv(Chat chat)$
-        }
-
-        class ServerApp {
-            +void main()$
-        }
+    class Constants {
+        +String SERVER_ADDR$
+        +int SERVER_PORT$
+        +String SYSTEM_NAME$
+        +String ADMIN_NAME$
     }
-    Chat <.. ServerThread
-    Chat <.. ChatServer
-    Chat <.. CSVReader
+}
 
-    User <.. ServerThread
-    User <.. ChatServer
-    User <.. CSVReader
+namespace client {
+    class SwingClientApp {
+        -JPanel panelCenter
+        -JPanel panelSouth
+        -JTextField textField
+        -JButton button1
+        -JTextArea textArea
+        -JScrollPane scrollPane
+        -JScrollBar scrollBar
+        -Socket socket
+        -BufferedReader reader
+        -PrintWriter writer
+        -void setCenter()
+        -void setSouth()
+        +void actionPerformed(ActionEvent e)
+        -void sendMessage()
+        +JButton getButton()
+        +JTextArea getTextArea()
+        +void setSocket()
+        +void main()$
+    }
+}
 
-    Constants <.. SwingClientApp
-    Constants <.. User
-    Constants <.. ChatServer
-    Constants <.. CSVReader
-    Constants <.. ServerApp
+namespace server {
+    class ChatServer {
+        -ArrayList~ServerThread~ threadList$
+        -HashMap~String, String~ userMap$
+        -HashMap~Long, String~ chatMap$
+        ~ArrayList~ServerThread~ getThreadList()$
+        +String getUserName(String ipAddr)$
+        ~String getChatContents(Long timestamp)$
+        ~Iterator~Long~ getIterator()$
+        ~void addUser(User user)$
+        ~void addUser(String ipAddr, String userName)$
+        ~void addChat(Chat chat)$
+        ~void addChat(long timestamp, String content)$
+        ~Chat waiting()$
+        ~Chat newClient(String ipAddr)$
+        ~Chat clientJoined(String ipAddr)$
+        ~Chat clientsChat(String ipAddr, String content)$
+        ~Chat clientLeft(String ipAddr)$
+    }
 
-    CSVReader <.. ChatServer
-    CSVReader <.. ServerApp
+    class ServerThread {
+        -Socket clientSocket;
+        -BufferedReader reader;
+        -PrintWriter writer;
+        -String CLIENT_IP
+        +ServerThread(Socket clientSocket)
+        +void run()
+        -void broadcastMsg(Chat chat)
+        -void showPreviousMsg()
+    }
 
-    ServerApp ..> ChatServer
-    ServerApp ..> ServerThread
+    class CSVReader {
+        +void saveChatCsv()
+        +void saveUserCsv()
+        ~void addUserCsv(User user)$
+        ~void addChatCsv(Chat chat)$
+    }
+
+    class ServerApp {
+        +void main()$
+    }
+}
+Chat <.. ServerThread
+Chat <.. ChatServer
+Chat <.. CSVReader
+
+User <.. ServerThread
+User <.. ChatServer
+User <.. CSVReader
+
+Constants <.. SwingClientApp
+Constants <.. User
+Constants <.. ChatServer
+Constants <.. CSVReader
+Constants <.. ServerApp
+
+CSVReader <.. ChatServer
+CSVReader <.. ServerApp
+
+ServerApp ..> ChatServer
+ServerApp ..> ServerThread
 ```
 
 ## 04 구현 기능
-### 1. 클라이언트
+### 1. 클라이언트 GUI
 ![](https://raw.githubusercontent.com/suyons/StrangeChat/Main/image_icon/client_screenshot.png)
 
-### 2. 서버 CSV
+### 2. 서버 CSV 파일 입출력
+![](https://raw.githubusercontent.com/suyons/StrangeChat/Main/image_icon/screenshot_server_csv.png)
 
-
-## 05 코드 소개
-
-## 06 돌아보며
+## 05 돌아보며
+### 1. 아이디어 기획 과정
